@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-agro-green: #0d4d13;
+  --color-agro-light-green: #4caf50;
+  --color-agro-gold: #c5a059;
+  --color-agro-earth: #3e2723;
+  --color-agro-sand: #f5f5f0;
+  
+  --font-outfit: "Outfit", sans-serif;
+  --font-playfair: "Playfair Display", serif;
+  
+  --shadow-premium: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 5px 15px -5px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 20px rgba(76, 175, 80, 0.15);
+}
+
+:root {
+  --font-outfit: "Outfit", sans-serif;
+  --font-playfair: "Playfair Display", serif;
+}
+
+body {
+  font-family: var(--font-outfit);
+  background-color: #fcfcf9;
+  color: #1a1a1a;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* Premium Utility Classes */
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+  }
+  
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #0d4d13 0%, #4caf50 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .premium-input {
+    @apply w-full bg-white/50 border border-slate-200 rounded-2xl px-12 py-4 focus:outline-none focus:border-agro-green/50 focus:ring-4 focus:ring-agro-green/5 transition-all duration-300;
+  }
+  
+  .premium-button {
+    @apply w-full bg-agro-green text-white py-4 rounded-2xl font-bold shadow-premium hover:bg-agro-green/90 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 flex items-center justify-center gap-2;
+  }
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-xl border border-white/40 rounded-[2.5rem] shadow-premium;
+  }
+}
+
+/* Custom Serif Heading */
+.heading-serif {
+  font-family: var(--font-playfair);
+  font-weight: 700;
+}
+
+/* Background Gradients */
+.bg-mesh {
+  background-color: #fcfcf9;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(76, 175, 80, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(197, 160, 89, 0.05) 0px, transparent 50%);
+}
+
+/* Scanning Animation */
+@keyframes scan {
+  0% { top: 0; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.animate-scan {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #4caf50, transparent);
+  animation: scan 3s linear infinite;
+  z-index: 10;
+}
