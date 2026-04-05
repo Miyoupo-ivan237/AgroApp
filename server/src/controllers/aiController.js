@@ -1,145 +1,103 @@
-const { exec } = require('child_process');
-const path = require('path');
+const aiService = require('../services/aiService');
 const fs = require('fs');
 
-exports.detectDisease = (req, res) => {
+/**
+ * AI Controller - Optimized for Performance
+ * Uses internal JS service for simulated AI to avoid process overhead.
+ */
+
+exports.detectDisease = async (req, res) => {
     if (!req.file) {
         return res.status(400).json({ error: 'Please upload an image for analysis.' });
     }
 
-    const imagePath = req.file.path;
-    const scriptPath = path.join(__dirname, '../../../ai/plant_detector.py');
-
-    // Execute the Python script with 'detect' command
-    exec(`py "${scriptPath}" detect "${imagePath}"`, (error, stdout, stderr) => {
-        // Clean up the uploaded file after processing
-        fs.unlinkSync(imagePath);
-
-        if (error) {
-            console.error(`AI Error: ${error.message}`);
-            return res.status(500).json({ error: 'AI Module failed to process the image.' });
+    try {
+        const result = await aiService.detectDisease(req.file.path);
+        
+        // Clean up the uploaded file
+        if (req.file && fs.existsSync(req.file.path)) {
+            fs.unlinkSync(req.file.path);
         }
 
-        try {
-            const result = JSON.parse(stdout);
-            
-            if (result.status === 'success') {
-                res.json({
-                    disease: result.detected_issue,
-                    confidence: `${(result.confidence_score * 100).toFixed(1)}%`,
-                    solution: result.recommended_solution,
-                    treatment_window: result.fertilizer_schedule || 'Immediate Attention Required',
-                    crop: result.crop || 'Unknown'
-                });
-            } else {
-                res.json({
-                    error: result.message || 'Crop not recognized by AI.'
-                });
-            }
-        } catch (e) {
-            console.error(`Parsing Error: ${stdout}`);
-            res.status(500).json({ error: 'Failed to parse AI response.' });
-        }
-    });
+        res.json({
+            disease: result.disease || 'Unknown',
+            confidence: result.confidence || '0%',
+            solution: result.solution || 'Consult an expert.',
+            treatment_window: result.treatment_window || 'Immediate Attention Required',
+            crop: result.crop || 'Unknown'
+        });
+    } catch (e) {
+        console.error(`AI Error: ${e.message}`);
+        res.status(500).json({ error: 'AI Module failed to process the image.' });
+    }
 };
 
-exports.getPlantGuide = (req, res) => {
+exports.getPlantGuide = async (req, res) => {
     const { plant_name } = req.body;
     if (!plant_name) {
         return res.status(400).json({ error: 'Please provide a plant name.' });
     }
 
-    const scriptPath = path.join(__dirname, '../../../ai/plant_detector.py');
-
-    // Execute the Python script with 'guide' command
-    exec(`py "${scriptPath}" guide "${plant_name}"`, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`AI Guide Error: ${error.message}`);
-            return res.status(500).json({ error: 'AI Guide Module failed.' });
+    try {
+        const result = await aiService.getPlantGuide(plant_name);
+        if (result.status === 'success') {
+            res.json({
+                status: 'success',
+                data: result.data
+            });
+        } else {
+            res.status(404).json({ error: 'Plant guide not found.' });
         }
-
-        try {
-            const result = JSON.parse(stdout);
-            if (result.status === 'success') {
-                res.json({
-                    status: 'success',
-                    data: result.guide_data
-                });
-            } else {
-                res.status(404).json({ error: 'Plant guide not found.' });
-            }
-        } catch (e) {
-            console.error(`Parsing Error: ${stdout}`);
-            res.status(500).json({ error: 'Failed to parse AI guide response.' });
-        }
-    });
+    } catch (e) {
+        console.error(`AI Guide Error: ${e.message}`);
+        res.status(500).json({ error: 'AI Guide Module failed.' });
+    }
 };
 
-exports.scanBags = (req, res) => {
+exports.scanBags = async (req, res) => {
     if (!req.file) {
         return res.status(400).json({ error: 'Please upload an image of your bags.' });
     }
 
-    const imagePath = req.file.path;
-    const scriptPath = path.join(__dirname, '../../../ai/plant_detector.py');
+    try {
+        const result = await aiService.scanBags(req.file.path);
 
-    exec(`py "${scriptPath}" bag_scan "${imagePath}"`, (error, stdout, stderr) => {
-        if (req.file && fs.existsSync(imagePath)) {
-            fs.unlinkSync(imagePath);
+        // Clean up the uploaded file
+        if (req.file && fs.existsSync(req.file.path)) {
+            fs.unlinkSync(req.file.path);
         }
 
-        if (error) {
-            console.error(`AI Bag Scan Error: ${error.message}`);
-            return res.status(500).json({ error: 'AI Bag Scan Module failed.' });
-        }
-
-        try {
-            const result = JSON.parse(stdout);
-            if (result.status === 'success') {
-                res.json({
-                    count: result.count,
-                    weight: result.weight,
-                    crop: result.crop,
-                    status: `Graded (${result.grading})`,
-                    confidence: `${(result.confidence * 100).toFixed(1)}%`
-                });
-            } else {
-                res.status(500).json({ error: 'Failed to analyze bags.' });
-            }
-        } catch (e) {
-            console.error(`Parsing Error: ${stdout}`);
-            res.status(500).json({ error: 'Failed to parse AI response.' });
-        }
-    });
+        res.json({
+            count: result.count,
+            weight: result.weight,
+            crop: result.crop,
+            status: result.status,
+            confidence: result.confidence
+        });
+    } catch (e) {
+        console.error(`AI Bag Scan Error: ${e.message}`);
+        res.status(500).json({ error: 'AI Bag Scan Module failed.' });
+    }
 };
 
-exports.generateQuiz = (req, res) => {
+exports.generateQuiz = async (req, res) => {
     const { crop_name } = req.body;
     if (!crop_name) {
         return res.status(400).json({ error: 'Please provide a crop name.' });
     }
 
-    const scriptPath = path.join(__dirname, '../../../ai/plant_detector.py');
-
-    exec(`py "${scriptPath}" quiz_gen "${crop_name}"`, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`AI Quiz Gen Error: ${error.message}`);
-            return res.status(500).json({ error: 'AI Quiz Module failed.' });
+    try {
+        const result = await aiService.generateQuiz(crop_name);
+        if (result.status === 'success') {
+            res.json({
+                status: 'success',
+                quiz: result.quiz
+            });
+        } else {
+            res.status(500).json({ error: 'Failed to generate quiz.' });
         }
-
-        try {
-            const result = JSON.parse(stdout);
-            if (result.status === 'success') {
-                res.json({
-                    status: 'success',
-                    quiz: result.quiz
-                });
-            } else {
-                res.status(500).json({ error: 'Failed to generate quiz.' });
-            }
-        } catch (e) {
-            console.error(`Parsing Error: ${stdout}`);
-            res.status(500).json({ error: 'Failed to parse AI quiz response.' });
-        }
-    });
+    } catch (e) {
+        console.error(`AI Quiz Error: ${e.message}`);
+        res.status(500).json({ error: 'AI Quiz Module failed.' });
+    }
 };
