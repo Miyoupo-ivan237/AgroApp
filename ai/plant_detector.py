@@ -122,10 +122,10 @@ def detect_plant_issue(image_path):
         return {
             "status": "success",
             "crop": "Generic Crop",
-            "detected_issue": "General Nutrient Deficiency / Mild Stress",
-            "recommended_solution": "Ensure consistent watering and check for small insects under leaves. Use organic manure to boost plant immunity.",
-            "fertilizer_schedule": "Balanced NPK 15-15-15 or Compost application.",
-            "confidence_score": 0.72
+            "detected_issue": "General Environmental Stress / Unknown Pathogen",
+            "confidence_score": 0.45,
+            "recommended_solution": "Optimize watering schedule and ensure adequate sunlight. Apply a broad-spectrum organic fungicide and check soil pH. Consult a local expert if symptoms persist.",
+            "fertilizer_schedule": "NPK 15-15-15 (Standard dosage)"
         }
 
 def get_plant_guide(plant_name):
