@@ -33,13 +33,13 @@ exports.detectDisease = async (req, res) => {
 };
 
 exports.getPlantGuide = async (req, res) => {
-    const { plant_name } = req.body;
+    const { plant_name, lang } = req.body;
     if (!plant_name) {
         return res.status(400).json({ error: 'Please provide a plant name.' });
     }
 
     try {
-        const result = await aiService.getPlantGuide(plant_name);
+        const result = await aiService.getPlantGuide(plant_name, lang);
         if (result.status === 'success') {
             res.json({
                 status: 'success',
@@ -81,13 +81,13 @@ exports.scanBags = async (req, res) => {
 };
 
 exports.generateQuiz = async (req, res) => {
-    const { crop_name } = req.body;
+    const { crop_name, lang } = req.body;
     if (!crop_name) {
         return res.status(400).json({ error: 'Please provide a crop name.' });
     }
 
     try {
-        const result = await aiService.generateQuiz(crop_name);
+        const result = await aiService.generateQuiz(crop_name, lang);
         if (result.status === 'success') {
             res.json({
                 status: 'success',

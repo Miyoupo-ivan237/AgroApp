@@ -7,60 +7,67 @@ const MOCK_PLANT_DATABASE = {
         "fertilizer": "NPK 15-15-15 (apply 4-6 weeks after planting)",
         "confidence": 0.94
     },
-    "maize": {
-        "issue": "Fall Armyworm Damage",
-        "solution": "Manual collection of larvae or use of organic pesticides (Neem oil).",
-        "fertilizer": "NPK 15-15-15 (Two bags/ha) + Urea (apply 2 and 6 weeks after germination). Note: Use LADABA as pre-emergence herbicide.",
-        "confidence": 0.88
-    },
-    "tomato": {
-        "issue": "Early Blight",
-        "solution": "Remove lower infected leaves. Avoid overhead watering.",
-        "fertilizer": "Calcium-rich fertilizer to prevent blossom end rot.",
-        "confidence": 0.91
-    },
-    "cocoa": {
-        "issue": "Black Pod Disease (Phytophthora)",
-        "solution": "Prune excess branches for better airflow. Remove and destroy infected pods.",
-        "fertilizer": "NPK 0-23-19 or specialized Cocoa fertilizer.",
-        "confidence": 0.92
-    },
-    "oil palm": {
-        "issue": "Basal Stem Rot (Ganoderma)",
-        "solution": "Isolate infected trees. Improve soil drainage and use Bio-fungicides.",
-        "fertilizer": "Potassium-rich fertilization (MOP).",
-        "confidence": 0.85
-    }
+    // ... we don't necessarily need to translate disease detect here since the frontend mostly uses ai/guide for textual info 
+    // unless they use detect (which works via Python or fallback).
 };
 
 const GUIDE_DATABASE = {
     "maize": {
-        "title": "Maize (Corn) High-Yield Guide",
-        "description": "High-performing Maize requires deep plowing and early nitrogen application. Monitor for Fall Armyworm from germination.",
-        "planting": "Plant in early March (March 15-31) for the main season. Space 75cm x 25cm.",
-        "fertilizer": "Apply NPK 15-15-15 at planting. Follow with Urea at 4 and 7 weeks.",
-        "harvest": "Harvest after 90-110 days when husks turn brown and dry.",
-        "duration": "3.5 Months",
-        "growthStages": [
-            {"level": "Pre-planting", "fertilizer": "NPK 15-15-15 (Two bags/ha)", "herbicide": "LADABA (Pre-emergence)"},
-            {"level": "3-4 Weeks", "fertilizer": "Urea (Top-dressing)", "herbicide": "Selective weeding"},
-            {"level": "6 Weeks (Flowers)", "fertilizer": "NPK 20-10-10", "herbicide": "Manual weeding only"}
-        ]
+        "en": {
+            "title": "Maize (Corn) High-Yield Guide",
+            "description": "High-performing Maize requires deep plowing and early nitrogen application. Monitor for Fall Armyworm from germination.",
+            "planting": "Plant in early March (March 15-31) for the main season. Space 75cm x 25cm.",
+            "fertilizer": "Apply NPK 15-15-15 at planting. Follow with Urea at 4 and 7 weeks.",
+            "harvest": "Harvest after 90-110 days when husks turn brown and dry.",
+            "duration": "3.5 Months",
+            "growthStages": [
+                {"level": "Pre-planting", "fertilizer": "NPK 15-15-15 (Two bags/ha)", "herbicide": "LADABA (Pre-emergence)"},
+                {"level": "3-4 Weeks", "fertilizer": "Urea (Top-dressing)", "herbicide": "Selective weeding"},
+                {"level": "6 Weeks (Flowers)", "fertilizer": "NPK 20-10-10", "herbicide": "Manual weeding only"}
+            ]
+        },
+        "fr": {
+            "title": "Guide de Production de Maïs à Haut Rendement",
+            "description": "Le maïs performant nécessite un labour profond et un apport précoce en azote. Surveillez la chenille légionnaire.",
+            "planting": "Semer début mars (15-31 mars). Écartement 75cm x 25cm.",
+            "fertilizer": "Appliquer NPK 15-15-15 au semis. Suivi d'Urée à 4 et 7 semaines.",
+            "harvest": "Récolter après 90-110 jours quand les feuilles brunissent.",
+            "duration": "3.5 Mois",
+            "growthStages": [
+                {"level": "Pré-semis", "fertilizer": "NPK 15-15-15 (Deux sacs/ha)", "herbicide": "LADABA (Pré-levée)"},
+                {"level": "3-4 Semaines", "fertilizer": "Urée", "herbicide": "Désherbage sélectif"},
+                {"level": "6 Semaines", "fertilizer": "NPK 20-10-10", "herbicide": "Désherbage manuel uniquement"}
+            ]
+        }
     },
     "cassava": {
-        "title": "Cassava Tubers Growth Manual",
-        "description": "Cassava is the most resilient crop. Best in sandy loam. Tuberization starts after month 3.",
-        "planting": "Plant cuttings at 45 degree angle. Best in loose, sandy-loam soil.",
-        "fertilizer": "Use NPK 12-12-17 or wood ash. Nitrogen is critical in first 3 months.",
-        "harvest": "Ready in 10-12 months. Uproot carefully to avoid tuber damage.",
-        "duration": "12 Months",
-        "growthStages": [
-            {"level": "1 Month", "fertilizer": "NPK 12-12-17", "herbicide": "Diuron (Pre-emergence)"},
-            {"level": "3 Months", "fertilizer": "Potassium-rich organic mix", "herbicide": "Selective weeding"},
-            {"level": "6-8 Months", "fertilizer": "Wood ash or Poultry manure", "herbicide": "Final cleaning"}
-        ]
+        "en": {
+            "title": "Cassava Tubers Growth Manual",
+            "description": "Cassava is the most resilient crop. Best in sandy loam. Tuberization starts after month 3.",
+            "planting": "Plant cuttings at 45 degree angle. Best in loose, sandy-loam soil.",
+            "fertilizer": "Use NPK 12-12-17 or wood ash. Nitrogen is critical in first 3 months.",
+            "harvest": "Ready in 10-12 months. Uproot carefully to avoid tuber damage.",
+            "duration": "12 Months",
+            "growthStages": [
+                {"level": "1 Month", "fertilizer": "NPK 12-12-17", "herbicide": "Diuron (Pre-emergence)"},
+                {"level": "3 Months", "fertilizer": "Potassium-rich organic mix", "herbicide": "Selective weeding"},
+                {"level": "6-8 Months", "fertilizer": "Wood ash or Poultry manure", "herbicide": "Final cleaning"}
+            ]
+        },
+        "fr": {
+            "title": "Manuel de Croissance du Manioc",
+            "description": "Le manioc est très résilient. Idéal en sol sablo-limoneux. La tubérisation commence au 3ème mois.",
+            "planting": "Planter les boutures à un angle de 45 degrés.",
+            "fertilizer": "Utiliser NPK 12-12-17 ou cendres. L'azote est crucial les 3 premiers mois.",
+            "harvest": "Prêt en 10-12 mois. Déraciner avec précaution.",
+            "duration": "12 Mois",
+            "growthStages": [
+                {"level": "1 Mois", "fertilizer": "NPK 12-12-17", "herbicide": "Diuron (Pré-levée)"},
+                {"level": "3 Mois", "fertilizer": "Mélange bio riche en Potassium", "herbicide": "Désherbage sélectif"},
+                {"level": "6-8 Mois", "fertilizer": "Cendre de bois ou fumier", "herbicide": "Nettoyage final"}
+            ]
+        }
     }
-    // ... more can be ported as needed
 };
 
 exports.detectDisease = async (imagePath) => {
@@ -96,31 +103,33 @@ exports.detectDisease = async (imagePath) => {
     };
 };
 
-exports.getPlantGuide = async (plantName) => {
+exports.getPlantGuide = async (plantName, lang = 'en') => {
     if (!plantName || typeof plantName !== 'string') {
         return { status: "error", message: "Invalid plant name" };
     }
     const query = plantName.toLowerCase().trim();
     for (const crop of Object.keys(GUIDE_DATABASE)) {
         if (query.includes(crop)) {
-            return { status: "success", data: GUIDE_DATABASE[crop] };
+            const guide = GUIDE_DATABASE[crop][lang] || GUIDE_DATABASE[crop]['en'];
+            return { status: "success", data: guide };
         }
     }
 
     // AI Fallback Generation (Instant)
+    const isFr = lang === 'fr';
     return {
         status: "success",
         data: {
-            title: `AI Expert Guide: ${plantName} (Cameroon Zone)`,
-            description: `Custom production roadmap for ${plantName}. Optimized for local soil.`,
-            planting: `For ${plantName}, ensure optimal soil pH (5.5-7.0) during rainy season.`,
-            fertilizer: "General Recommendation: Start with NPK 15-15-15.",
-            harvest: "Harvest when signs of physiological maturity appear.",
-            duration: "Category Specific",
+            title: isFr ? `Guide Expert IA: ${plantName}` : `AI Expert Guide: ${plantName} (Cameroon Zone)`,
+            description: isFr ? `Feuille de route sur mesure pour ${plantName}. Optimisé pour notre sol.` : `Custom production roadmap for ${plantName}. Optimized for local soil.`,
+            planting: isFr ? `Assurer un pH optimal du sol (5.5-7.0) pendant la saison des pluies.` : `For ${plantName}, ensure optimal soil pH (5.5-7.0) during rainy season.`,
+            fertilizer: isFr ? `Recommandation Générale: Commencer avec NPK 15-15-15.` : "General Recommendation: Start with NPK 15-15-15.",
+            harvest: isFr ? `Récolter quand les signes de maturité apparaissent.` : "Harvest when signs of physiological maturity appear.",
+            duration: isFr ? "Spécifique à la catégorie" : "Category Specific",
             growthStages: [
-                {level: "Phase 1: Seedling", fertilizer: "NPK 15-15-15", herbicide: "Pre-emergence"},
-                {level: "Phase 2: Growth", fertilizer: "Nitrogen Boost", herbicide: "Selective Weeding"},
-                {level: "Phase 3: Maturity", fertilizer: "Potassium Boost", herbicide: "Cleanup"}
+                {level: isFr ? "Phase 1: Semis" : "Phase 1: Seedling", fertilizer: "NPK 15-15-15", herbicide: isFr ? "Pré-émergence" : "Pre-emergence"},
+                {level: isFr ? "Phase 2: Croissance" : "Phase 2: Growth", fertilizer: isFr ? "Boost d'Azote" : "Nitrogen Boost", herbicide: isFr ? "Sarclage" : "Selective Weeding"},
+                {level: isFr ? "Phase 3: Maturité" : "Phase 3: Maturity", fertilizer: isFr ? "Boost Potassium" : "Potassium Boost", herbicide: isFr ? "Nettoyage" : "Cleanup"}
             ]
         }
     };
@@ -138,19 +147,33 @@ exports.scanBags = async (imagePath) => {
     };
 };
 
-exports.generateQuiz = async (cropName) => {
+exports.generateQuiz = async (cropName, lang = 'en') => {
     const name = cropName.toLowerCase();
     const isCorn = name.includes('corn') || name.includes('maize');
-    
-    const quiz = isCorn ? [
-        {question: "When is the best time to plant Maize in Cameroon?", options: ["March-April", "October-November", "December-January"], answer: "March-April"},
-        {question: "Which herbicide is used as pre-emergence for Maize?", options: ["Urea", "LADABA", "Neem Oil"], answer: "LADABA"},
-        {question: "How long does common Maize take to mature?", options: ["6 months", "3-4 months", "1 year"], answer: "3-4 months"}
-    ] : [
-        {question: `Is ${cropName} best grown in ridges or mounds?`, options: ["Ridges", "Mounds", "Either"], answer: "Ridges"},
-        {question: "What is the primary fertilizer for initial growth?", options: ["Urea", "NPK 15-15-15", "MOP"], answer: "NPK 15-15-15"},
-        {question: "How do you identify maturity?", options: ["Leaves turn yellow", "Fruit size", "Both"], answer: "Both"}
-    ];
+    const isFr = lang === 'fr';
+
+    let quiz = [];
+    if (isCorn) {
+        quiz = isFr ? [
+            {question: "Quelle est la meilleure période pour planter le maïs au Cameroun ?", options: ["Mars-Avril", "Octobre-Novembre", "Décembre-Janvier"], answer: "Mars-Avril"},
+            {question: "Quel herbicide est utilisé en pré-émergence pour le maïs ?", options: ["Urée", "LADABA", "Huile de Neem"], answer: "LADABA"},
+            {question: "Combien de temps faut-il pour qu'un maïs commun soit mature ?", options: ["6 mois", "3-4 mois", "1 an"], answer: "3-4 mois"}
+        ] : [
+            {question: "When is the best time to plant Maize in Cameroon?", options: ["March-April", "October-November", "December-January"], answer: "March-April"},
+            {question: "Which herbicide is used as pre-emergence for Maize?", options: ["Urea", "LADABA", "Neem Oil"], answer: "LADABA"},
+            {question: "How long does common Maize take to mature?", options: ["6 months", "3-4 months", "1 year"], answer: "3-4 months"}
+        ];
+    } else {
+        quiz = isFr ? [
+            {question: `Le ${cropName} pousse-t-il mieux sur des billons ou des buttes ?`, options: ["Billons", "Buttes", "Les deux"], answer: "Billons"},
+            {question: "Quel est l'engrais principal pour la croissance initiale ?", options: ["Urée", "NPK 15-15-15", "MOP"], answer: "NPK 15-15-15"},
+            {question: "Comment identifier la maturité ?", options: ["Les feuilles jaunissent", "Taille du fruit", "Les deux"], answer: "Les deux"}
+        ] : [
+            {question: `Is ${cropName} best grown in ridges or mounds?`, options: ["Ridges", "Mounds", "Either"], answer: "Ridges"},
+            {question: "What is the primary fertilizer for initial growth?", options: ["Urea", "NPK 15-15-15", "MOP"], answer: "NPK 15-15-15"},
+            {question: "How do you identify maturity?", options: ["Leaves turn yellow", "Fruit size", "Both"], answer: "Both"}
+        ];
+    }
 
     return { status: "success", quiz };
 };

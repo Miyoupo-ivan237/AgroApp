@@ -48,7 +48,7 @@ export default function FarmerDashboard() {
         setActiveQuiz(null);
         setQuizScore(null);
         try {
-            const res = await api.post('ai/quiz-gen', { crop_name: cropName });
+            const res = await api.post('ai/quiz-gen', { crop_name: cropName, lang: language });
             setActiveQuiz(res.data.quiz);
         } catch (err) {
             console.error("Quiz generation failed", err);
@@ -70,7 +70,7 @@ export default function FarmerDashboard() {
         if (!searchQuery) return;
         setAiGuideLoading(true);
         try {
-            const res = await api.post('ai/guide', { plant_name: searchQuery });
+            const res = await api.post('ai/guide', { plant_name: searchQuery, lang: language });
             setAiGuideResult(res.data.data);
         } catch (err) {
             console.error("AI Guide error", err);
