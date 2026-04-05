@@ -262,10 +262,63 @@ def get_plant_guide(plant_name):
                 {"level": "Booting", "fertilizer": "NPK blend", "herbicide": "Spot weeding"},
                 {"level": "Ripening", "fertilizer": "N/A", "herbicide": "N/A"}
             ]
+        },
+        "cocoa": {
+            "title": "Cocoa (Cacao) Production Guide",
+            "planting": "Plant in shaded nurseries then transplant under permanent shade (3m x 3m).",
+            "fertilizer": "NPK 0-23-19 (high Phosphorus/Potassium) applied in circular trenches.",
+            "harvest": "Pick ripe yellow/orange pods. Avoid damaging the flower cushion.",
+            "herbicide_info": "Manual slashing of weeds. Avoid chemicals near young trees.",
+            "duration": "3-5 Years (Initial)",
+            "growthStages": [
+                {"level": "Year 1", "fertilizer": "Organic manure + NPK 15-15-15", "herbicide": "Manual clearing"},
+                {"level": "Pre-flowering", "fertilizer": "Potassium-rich blend", "herbicide": "Slashing"},
+                {"level": "Main Harvest", "fertilizer": "Cocoa specialized mix", "herbicide": "N/A"}
+            ]
+        },
+        "oil palm": {
+            "title": "Oil Palm (Elite Varieties)",
+            "planting": "Triangular spacing 9m x 9m. Dig large holes (60cm) with compost.",
+            "fertilizer": "Heavy needs for Potassium and Magnesium (MOP & Kieserite).",
+            "harvest": "Cut clusters when at least 5 fruits have detached naturally.",
+            "herbicide_info": "Ring weeding and path maintenance are critical.",
+            "duration": "3 Years (Initial)",
+            "growthStages": [
+                {"level": "Nursery", "fertilizer": "Soluble NPK", "herbicide": "Hand weeding"},
+                {"level": "Immature", "fertilizer": "NPK 12-12-17-2", "herbicide": "Ring weeding"},
+                {"level": "Mature", "fertilizer": "MOP + Urea + Boron", "herbicide": "N/A"}
+            ]
+        },
+        "avocado": {
+            "title": "Avocado (Pear) Export Guide",
+            "planting": "Best in well-drained volcanic soil. Plant 7m x 7m apart.",
+            "fertilizer": "Nitrogen in early years, more Potassium during fruit development.",
+            "harvest": "Harvest when full-sized but still firm. Will ripen off the tree.",
+            "herbicide_info": "Mulching is vital to protect sensitive surface roots.",
+            "duration": "3-4 Years",
+            "growthStages": [
+                {"level": "Establishment", "fertilizer": "NPK 20-10-10", "herbicide": "Mulching"},
+                {"level": "Flowering", "fertilizer": "Boron + Zinc spray", "herbicide": "N/A"},
+                {"level": "Fruit Set", "fertilizer": "Sulfate of Potash", "herbicide": "N/A"}
+            ]
+        },
+        "cabbage": {
+            "title": "Cabbage (Market Head)",
+            "planting": "4 weeks in nursery. Space 45cm x 45cm in the field.",
+            "fertilizer": "High Nitrogen for leafy growth. Side-dress with Urea at 4 weeks.",
+            "harvest": "Cut once the head is firm and reaches desired size.",
+            "herbicide_info": "Requires frequent weeding until the canopy closes.",
+            "duration": "3 Months",
+            "growthStages": [
+                {"level": "Transplant", "fertilizer": "DAP", "herbicide": "N/A"},
+                {"level": "Head initiation", "fertilizer": "Ammonium Nitrate", "herbicide": "Manual weeding"},
+                {"level": "Heading", "fertilizer": "Potassium Nitrate", "herbicide": "N/A"}
+            ]
         }
     }
-
-    query = plant_name.lower()
+    
+    query = plant_name.lower().strip()
+    # Check for direct matches
     for crop in GUIDE_DATABASE:
         if crop in query:
             return {
@@ -273,16 +326,21 @@ def get_plant_guide(plant_name):
                 "guide_data": GUIDE_DATABASE[crop]
             }
     
-    # Simple fallback
+    # AI Simulation Fallback - Smarter generation
     return {
         "status": "success",
         "guide_data": {
-            "title": f"General Guide for {plant_name.capitalize()}",
-            "planting": "Consult your local agricultural delegate for exact dates in your zone.",
-            "fertilizer": "Balanced NPK (15-15-15) is generally safe for most Cameroon soil types.",
-            "harvest": "Depends on the variety. Check for signs of physiological maturity.",
-            "herbicide_info": "Manual weeding is recommended for unknown varieties.",
-            "duration": "Variable"
+            "title": f"AI Expert Guide: {plant_name.capitalize()} (Cameroon Zone)",
+            "planting": f"For {plant_name}, ensure optimal soil pH (5.5-7.0). Best planted during the rainy season onset in your specific Cameroon region.",
+            "fertilizer": "General Recommendation: Start with NPK 15-15-15 at planting. Use Urea for leafy growth and Potassium-rich blends during fruit/tuber development.",
+            "harvest": f"Harvest {plant_name} when signs of physiological maturity appear (dried leaves, color change, or size).",
+            "herbicide_info": "Integrated Pest Management (IPM) is recommended: Combine manual weeding with selective herbicides if available.",
+            "duration": "Category Specific - Consult Local Extension",
+            "growthStages": [
+                {"level": "Phase 1: Seedling", "fertilizer": "NPK 15-15-15", "herbicide": "Pre-emergence"},
+                {"level": "Phase 2: Growth", "fertilizer": "Nitrogen Boost", "herbicide": "Selective Weeding"},
+                {"level": "Phase 3: Maturity", "fertilizer": "Potassium Boost", "herbicide": "Cleanup"}
+            ]
         }
     }
 

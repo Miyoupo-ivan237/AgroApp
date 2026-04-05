@@ -1045,12 +1045,13 @@ export default function FarmerDashboard() {
                                         <div className="relative flex-1">
                                             <input 
                                                 type="text" 
-                                                placeholder={language === 'en' ? "Enter plant name (e.g. Red Corn, Beans)..." : "Entrez le nom (ex: Mais, Haricots)..."} 
+                                                placeholder={language === 'en' ? "Enter ANY plant name (e.g. Cocoa, Pepper, Avocado)..." : "Entrez le NOM d'une plante (ex: Cacao, Poivre, Avocat)..."} 
                                                 value={searchQuery}
                                                 onChange={e => {
                                                     setSearchQuery(e.target.value);
                                                     if (!e.target.value) setAiGuideResult(null);
                                                 }}
+                                                onKeyDown={e => e.key === 'Enter' && handleAskAI()}
                                                 className="w-full bg-slate-50 border-2 border-slate-100 rounded-[2rem] px-8 py-6 pr-20 focus:ring-4 focus:ring-agro-orange/10 transition-all font-black text-xl shadow-inner text-slate-700" 
                                             />
                                         </div>
@@ -1169,12 +1170,22 @@ export default function FarmerDashboard() {
                                         item.category.toLowerCase().includes(searchQuery.toLowerCase())
                                     )
                                 ).length === 0 && (
-                                    <div className="col-span-full py-20 text-center">
-                                        <div className="bg-slate-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300">
-                                            <Search size={40} />
+                                    <div className="col-span-full py-20 text-center glass-card bg-white border-dashed border-4 border-slate-100">
+                                        <div className="bg-agro-orange/10 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 text-agro-orange animate-pulse">
+                                            <Zap size={48} />
                                         </div>
-                                        <h4 className="text-xl font-black text-slate-400">{language === 'en' ? 'No guides found for your search' : 'Aucun guide trouvé pour votre recherche'}</h4>
-                                        <p className="text-slate-300 font-bold mt-2 uppercase text-xs tracking-widest">{language === 'en' ? 'Try searching for Maize, Beans or Production' : 'Essayez Maïs, Haricots ou Production'}</p>
+                                        <h4 className="text-2xl font-black text-slate-800 tracking-tighter uppercase italic">{language === 'en' ? 'Use AI for custom generation?' : 'Utiliser l\'IA pour générer ?'}</h4>
+                                        <p className="text-slate-400 font-bold mt-4 uppercase text-xs tracking-widest max-w-md mx-auto leading-relaxed">
+                                            {language === 'en' 
+                                                ? `We don't have a static guide for "${searchQuery}" yet. Click the "ASK AI GUIDE" button above to generate one instantly.` 
+                                                : `Nous n'avons pas encore de guide fixe pour "${searchQuery}". Cliquez sur "DEMANDER À L'IA" pour en générer un.`}
+                                        </p>
+                                        <button 
+                                            onClick={handleAskAI}
+                                            className="mt-8 px-10 py-5 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-agro-orange transition-all shadow-xl active:scale-95 flex items-center gap-3 mx-auto"
+                                        >
+                                            <Zap size={18} /> {language === 'en' ? 'GENERATE AI REPORT NOW' : 'GÉNÉRER LE RAPPORT IA'}
+                                        </button>
                                     </div>
                                 )}
 
@@ -1693,34 +1704,86 @@ export default function FarmerDashboard() {
                                         </button>
                                     </div>
                                     
-                                    <div className="space-y-8">
-                                        <div className="p-8 bg-slate-50 rounded-3xl border border-slate-100">
-                                            <h4 className="font-black text-slate-800 mb-4 flex items-center gap-2 uppercase text-sm italic tracking-widest"><Sprout size={18}/> Production Roadmap</h4>
-                                            <p className="text-slate-600 font-bold leading-relaxed whitespace-pre-line">{selectedGuide.description}</p>
+                                    <div className="space-y-10">
+                                        {/* 1. Overview & Roadmap */}
+                                        <div className="p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 p-8 text-slate-100">
+                                                <GraduationCap size={120} />
+                                            </div>
+                                            <div className="relative z-10">
+                                                <h4 className="font-black text-slate-900 mb-6 flex items-center gap-3 uppercase text-lg italic tracking-tighter">
+                                                    <Sprout className="text-agro-green" size={24}/> {language === 'en' ? 'PRODUCTION ROADMAP' : 'FEUILLE DE ROUTE'}
+                                                </h4>
+                                                <p className="text-slate-600 font-bold leading-relaxed text-lg max-w-2xl">
+                                                    {selectedGuide.description || selectedGuide.planting}
+                                                </p>
+                                            </div>
                                         </div>
 
-                                        {/* New Growth Timeline */}
+                                        {/* 2. Essential Requirements Grid */}
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                            <div className="p-8 bg-agro-green/5 rounded-3xl border border-agro-green/10">
+                                                <div className="w-10 h-10 bg-agro-green text-white rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-agro-green/20">
+                                                    <MapPin size={20} />
+                                                </div>
+                                                <h5 className="font-black text-slate-900 uppercase text-[10px] tracking-widest mb-2">{language === 'en' ? 'Optimal Planting' : 'Plantation Idéale'}</h5>
+                                                <p className="font-bold text-slate-600 text-sm leading-relaxed">{selectedGuide.planting || "Consult local zones."}</p>
+                                            </div>
+                                            <div className="p-8 bg-agro-yellow/5 rounded-3xl border border-agro-yellow/10">
+                                                <div className="w-10 h-10 bg-agro-yellow text-white rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-agro-yellow/20">
+                                                    <Zap size={20} />
+                                                </div>
+                                                <h5 className="font-black text-slate-900 uppercase text-[10px] tracking-widest mb-2">{language === 'en' ? 'Fertilizer Logic' : 'Logique Engrais'}</h5>
+                                                <p className="font-bold text-slate-600 text-sm leading-relaxed">{selectedGuide.fertilizer || "NPK 15-15-15 standard."}</p>
+                                            </div>
+                                            <div className="p-8 bg-blue-500/5 rounded-3xl border border-blue-500/10">
+                                                <div className="w-10 h-10 bg-blue-500 text-white rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-blue-500/20">
+                                                    <Clock size={20} />
+                                                </div>
+                                                <h5 className="font-black text-slate-900 uppercase text-[10px] tracking-widest mb-2">{language === 'en' ? 'Harvest Window' : 'Récolte'}</h5>
+                                                <p className="font-bold text-slate-600 text-sm leading-relaxed">{selectedGuide.harvest || "Check maturation signs."}</p>
+                                            </div>
+                                        </div>
+
+                                        {/* 3. Protection & Herbicide Section */}
+                                        {(selectedGuide.herbicide_info || selectedGuide.herbicide) && (
+                                            <div className="p-8 bg-red-500/5 rounded-[2.5rem] border border-red-500/10 flex flex-col md:flex-row items-center gap-8">
+                                                <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center text-red-500 shadow-xl border border-red-100 flex-shrink-0">
+                                                    <Shield size={32} />
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-black text-red-500 uppercase text-xs tracking-[0.2em] mb-2">{language === 'en' ? 'TREATMENT & PROTECTION' : 'TRAITEMENT & PROTECTION'}</h4>
+                                                    <p className="text-slate-600 font-bold leading-relaxed">
+                                                        {selectedGuide.herbicide_info || selectedGuide.herbicide}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* 4. The Timeline (Detailed Progression) */}
                                         {selectedGuide.growthStages && (
-                                            <div className="space-y-4">
-                                                <h4 className="font-black text-slate-900 uppercase text-xs tracking-[0.2em] mb-4">{language === 'en' ? 'Plant Growth Timeline (Levels)' : 'Chronologie de Croissance (Niveaux)'}</h4>
-                                                <div className="space-y-3">
+                                            <div className="space-y-6">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="h-[2px] flex-1 bg-slate-100"></div>
+                                                    <h4 className="font-black text-slate-400 uppercase text-[10px] tracking-[0.4em] mb-4">{language === 'en' ? 'DETAILED GROWTH PROGRESSION' : 'PROGRESSION DÉTAILLÉE'}</h4>
+                                                    <div className="h-[2px] flex-1 bg-slate-100"></div>
+                                                </div>
+                                                
+                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                                     {selectedGuide.growthStages.map((stage, i) => (
-                                                        <div key={i} className="flex gap-4 group">
-                                                            <div className="flex flex-col items-center">
-                                                                <div className="w-8 h-8 rounded-full bg-agro-green text-white flex items-center justify-center text-[10px] font-black">{i+1}</div>
-                                                                {i < selectedGuide.growthStages.length - 1 && <div className="w-0.5 flex-1 bg-slate-100 my-1"></div>}
+                                                        <div key={i} className="bg-white border-2 border-slate-50 p-8 rounded-[2rem] hover:border-agro-green/20 transition-all relative group h-full">
+                                                            <div className="absolute -top-4 -left-4 w-10 h-10 bg-slate-900 text-white rounded-2xl flex items-center justify-center font-black text-xs shadow-xl group-hover:bg-agro-green transition-colors">
+                                                                {i + 1}
                                                             </div>
-                                                            <div className="flex-1 bg-white border border-slate-100 p-6 rounded-2xl group-hover:border-agro-green/30 transition-all">
-                                                                <p className="font-black text-slate-800 mb-3 text-lg">{stage.level}</p>
-                                                                <div className="grid grid-cols-2 gap-4">
-                                                                    <div className="bg-slate-50 p-3 rounded-xl">
-                                                                        <p className="text-[9px] font-black text-agro-green uppercase mb-1">{language === 'en' ? 'Fertilizer' : 'Engrais'}</p>
-                                                                        <p className="text-xs font-bold text-slate-600">{stage.fertilizer}</p>
-                                                                    </div>
-                                                                    <div className="bg-slate-50 p-3 rounded-xl">
-                                                                        <p className="text-[9px] font-black text-red-500 uppercase mb-1">{language === 'en' ? 'Grass Control' : 'Tuer herbes'}</p>
-                                                                        <p className="text-xs font-bold text-slate-600">{stage.herbicide}</p>
-                                                                    </div>
+                                                            <p className="font-black text-slate-800 mb-6 text-xl tracking-tighter mt-2">{stage.level}</p>
+                                                            <div className="space-y-4">
+                                                                <div className="bg-slate-50 p-4 rounded-2xl">
+                                                                    <p className="text-[9px] font-black text-agro-green uppercase mb-1">{language === 'en' ? 'Nutrition' : 'Nutrition'}</p>
+                                                                    <p className="text-xs font-bold text-slate-600 line-clamp-2">{stage.fertilizer}</p>
+                                                                </div>
+                                                                <div className="bg-slate-50 p-4 rounded-2xl">
+                                                                    <p className="text-[9px] font-black text-red-500 uppercase mb-1">{language === 'en' ? 'Protection' : 'Protection'}</p>
+                                                                    <p className="text-xs font-bold text-slate-600 line-clamp-2">{stage.herbicide}</p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1728,14 +1791,22 @@ export default function FarmerDashboard() {
                                                 </div>
                                             </div>
                                         )}
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div className="p-6 bg-agro-green/5 rounded-2xl border border-agro-green/10">
-                                                <h5 className="font-black text-agro-green uppercase text-[10px] tracking-widest mb-2">Growth Target</h5>
-                                                <p className="font-black text-slate-800">{selectedGuide.topic}</p>
+
+                                        {/* 5. Economic & Target Impact */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
+                                            <div className="p-10 bg-slate-900 text-white rounded-[3rem] relative overflow-hidden group shadow-2xl">
+                                                <div className="absolute top-0 right-0 w-32 h-32 bg-agro-green/20 rounded-full blur-3xl group-hover:scale-150 transition-transform"></div>
+                                                <div className="relative z-10">
+                                                    <h5 className="font-black text-agro-green uppercase text-[10px] tracking-[0.3em] mb-4 italic italic uppercase">{language === 'en' ? 'Estimated Duration' : 'Durée Estimée'}</h5>
+                                                    <p className="text-4xl font-black tracking-tighter">{selectedGuide.duration || "Variable"}</p>
+                                                </div>
                                             </div>
-                                            <div className="p-6 bg-agro-orange/5 rounded-2xl border border-agro-orange/10">
-                                                <h5 className="font-black text-agro-orange uppercase text-[10px] tracking-widest mb-2">Profit Strategy</h5>
-                                                <p className="font-black text-slate-800">{language === 'en' ? 'Direct to Market' : 'Directement au Marché'}</p>
+                                            <div className="p-10 bg-agro-orange text-white rounded-[3rem] relative overflow-hidden group shadow-2xl">
+                                                <div className="absolute top-0 right-0 w-32 h-32 bg-white/20 rounded-full blur-3xl group-hover:scale-150 transition-transform"></div>
+                                                <div className="relative z-10">
+                                                    <h5 className="font-black text-white/60 uppercase text-[10px] tracking-[0.3em] mb-4 italic uppercase">{language === 'en' ? 'Market Opportunity' : 'Opportunité Marché'}</h5>
+                                                    <p className="text-4xl font-black tracking-tighter">{selectedGuide.topic || "Direct Market"}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

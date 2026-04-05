@@ -2,8 +2,8 @@
 // php-server/api/ai-guide.php
 require_once __DIR__ . '/../include/helpers.php';
 
-if (!$payload || $payload['role'] !== 'ADMIN') {
-    sendResponse(['error' => 'Unauthorized. Admin access only.'], 403);
+if (!$payload || ($payload['role'] !== 'ADMIN' && $payload['role'] !== 'FARMER')) {
+    sendResponse(['error' => 'Unauthorized access.'], 403);
 }
 
 $data = json_decode(file_get_contents("php://input"), true);
