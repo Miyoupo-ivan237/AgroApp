@@ -12,6 +12,11 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use((req, res, next) => {
+    res.setHeader('X-Backend-Source', 'NodeJS-Agro');
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+});
 app.use('/uploads', express.static('uploads')); // Serve uploaded files if needed
 
 // Connect and Sync Database
@@ -21,6 +26,7 @@ app.use('/api/auth', authRoutes);
 app.use('/auth', authRoutes); // Alias to support raw /auth/register and /auth/login endpoints
 app.use('/api/crops', cropRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/ai', aiRoutes); // Alias to support /ai/guide directly from frontend
 
 // Placeholder for MoMo Payment Initializer
 app.post('/api/payments/momo-init', (req, res) => {

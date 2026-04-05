@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:5000/'; // Realigned with user's expected port 5000
+const API_URL = 'http://127.0.0.1:5000/api/'; // Included /api/ prefix and trailing slash for consistency
 
 const api = axios.create({
     baseURL: API_URL,

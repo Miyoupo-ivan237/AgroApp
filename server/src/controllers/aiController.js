@@ -27,8 +27,8 @@ exports.detectDisease = async (req, res) => {
             crop: result.crop || 'Unknown'
         });
     } catch (e) {
-        console.error(`AI Error: ${e.message}`);
-        res.status(500).json({ error: 'AI Module failed to process the image.' });
+        console.error(`AI Detection Error:`, e);
+        res.status(500).json({ error: 'AI Detection failed.' });
     }
 };
 
@@ -49,7 +49,7 @@ exports.getPlantGuide = async (req, res) => {
             res.status(404).json({ error: 'Plant guide not found.' });
         }
     } catch (e) {
-        console.error(`AI Guide Error: ${e.message}`);
+        console.error(`AI Guide Error:`, e);
         res.status(500).json({ error: 'AI Guide Module failed.' });
     }
 };
@@ -75,7 +75,7 @@ exports.scanBags = async (req, res) => {
             confidence: result.confidence
         });
     } catch (e) {
-        console.error(`AI Bag Scan Error: ${e.message}`);
+        console.error(`AI Bag Scan Error:`, e);
         res.status(500).json({ error: 'AI Bag Scan Module failed.' });
     }
 };
@@ -97,7 +97,7 @@ exports.generateQuiz = async (req, res) => {
             res.status(500).json({ error: 'Failed to generate quiz.' });
         }
     } catch (e) {
-        console.error(`AI Quiz Error: ${e.message}`);
-        res.status(500).json({ error: 'AI Quiz Module failed.' });
+        console.error(`AI Error:`, e);
+        res.status(500).json({ error: 'AI Module failed.' });
     }
 };

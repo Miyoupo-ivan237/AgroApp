@@ -97,6 +97,9 @@ exports.detectDisease = async (imagePath) => {
 };
 
 exports.getPlantGuide = async (plantName) => {
+    if (!plantName || typeof plantName !== 'string') {
+        return { status: "error", message: "Invalid plant name" };
+    }
     const query = plantName.toLowerCase().trim();
     for (const crop of Object.keys(GUIDE_DATABASE)) {
         if (query.includes(crop)) {

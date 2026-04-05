@@ -6,3 +6,4 @@ build/
 *.log
 uploads/
 tmp_*.php
+server/*.txt
