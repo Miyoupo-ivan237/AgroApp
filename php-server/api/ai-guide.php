@@ -18,8 +18,8 @@ if (!$plant_name) {
 
 // Execute Python script with 'guide' command
 $scriptPath = realpath('../../ai/plant_detector.py');
-// On Windows, use double quotes for the script path, but leave escapeshellarg to handle its own quoting
-$command = "python \"$scriptPath\" guide " . escapeshellarg($plant_name);
+// On Windows, use 'py' for the script path launcher
+$command = "py \"$scriptPath\" guide " . escapeshellarg($plant_name);
 $output = shell_exec($command);
 
 if (!$output) {

@@ -21,7 +21,7 @@ if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
     $scriptPath = realpath('../../ai/plant_detector.py');
     
     // Execute Python script with 'detect' command
-    $command = "python \"$scriptPath\" detect \"$absoluteImagePath\"";
+    $command = "py \"$scriptPath\" detect \"$absoluteImagePath\"";
     $output = shell_exec($command);
     
     // Clean up
