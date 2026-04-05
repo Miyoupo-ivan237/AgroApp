@@ -2,6 +2,9 @@
 // php-server/api/ai-guide.php
 require_once __DIR__ . '/../include/helpers.php';
 
+$token = getBearerToken();
+$payload = verifyToken($token);
+
 if (!$payload || ($payload['role'] !== 'ADMIN' && $payload['role'] !== 'FARMER')) {
     sendResponse(['error' => 'Unauthorized access.'], 403);
 }
