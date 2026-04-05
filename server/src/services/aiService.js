@@ -115,23 +115,83 @@ exports.getPlantGuide = async (plantName, lang = 'en') => {
         }
     }
 
-    // AI Fallback Generation (Instant)
+    // Smart AI Category Matching for Fallback
+    const categories = {
+        "tuber": ["yam", "potato", "macabo", "taro", "sweet", "igname", "pomme"],
+        "fruit": ["mango", "avocado", "orange", "lemon", "guava", "papaya", "apple", "pineapple", "mangue", "avocat", "citron"],
+        "leafy": ["lettuce", "cabbage", "spinach", "ndole", "kelenkelen", "laitue", "chou"],
+        "cereal": ["rice", "sorghum", "millet", "wheat", "riz", "blé"],
+        "bean": ["bean", "pea", "soya", "groundnut", "haricot", "pois", "arachide"]
+    };
+
+    let foundCategory = "general";
+    for (const [cat, keywords] of Object.entries(categories)) {
+        if (keywords.some(kw => query.includes(kw))) {
+            foundCategory = cat;
+            break;
+        }
+    }
+
     const isFr = lang === 'fr';
-    return {
-        status: "success",
-        data: {
+
+    // Tailored Fallback Templates
+    const templates = {
+        "tuber": {
+            title: isFr ? `Guide Spécialisé: Tubercules (${plantName})` : `Root & Tuber Guide: ${plantName}`,
+            description: isFr ? `Les tubercules ont besoin d'un sol meuble pour s'étendre.` : `Tubers need loose, aerated soil to allow expansion.`,
+            planting: isFr ? `Planter sur des billons ou buttes pour un bon drainage.` : `Plant in ridges or mounds for best crop drainage.`,
+            fertilizer: isFr ? `Un apport élevé en Potassium (K) est vital pour le poids.` : `High Potassium (K) is needed for heavy tuber weight.`,
+            harvest: isFr ? `Récolter quand les feuilles jaunissent (6-9 mois).` : `Harvest when leaves yellow or after 6-9 months.`,
+            duration: isFr ? "6 - 9 Mois" : "6 - 9 Months",
+            growthStages: [
+                {level: isFr ? "Phase Initiale" : "Early Stage", fertilizer: "NPK 15-15-15", herbicide: isFr ? "Manuel" : "Manual weeding"},
+                {level: isFr ? "Tubérisation" : "Tuberization", fertilizer: isFr ? "Riche en Potassium" : "Potassium Rich", herbicide: "N/A"},
+                {level: isFr ? "Maturité" : "Maturity", fertilizer: "N/A", herbicide: "N/A"}
+            ]
+        },
+        "fruit": {
+            title: isFr ? `Guide Arbre Fruitier: ${plantName}` : `Fruit Tree Guide: ${plantName}`,
+            description: isFr ? `Culture à long terme. Nécessite de grands trous de plantation.` : `Long-term investment tree crop. Requires large planting holes.`,
+            planting: isFr ? `Trous de 60cm, mélanger terre et fumier organique.` : `Dig 60cm holes, mix soil with organic manure.`,
+            fertilizer: isFr ? `Appliquer NPK 2 fois par an (saison des pluies).` : `Apply NPK twice a year during rainy seasons.`,
+            harvest: isFr ? `Prêt quand la couleur change.` : `Ready when fruit color changes or falls naturally.`,
+            duration: isFr ? "3 - 5 Ans" : "3 - 5 Years",
+            growthStages: [
+                {level: isFr ? "Jeune plant" : "Juvenile", fertilizer: isFr ? "Boost Azote" : "Nitrogen boost", herbicide: isFr ? "Désherbage en rond" : "Ring weeding"},
+                {level: isFr ? "Floraison" : "Flowering", fertilizer: isFr ? "Pulvérisation Bore/Zinc" : "Zinc/Boron foliar spray", herbicide: "Minimal"},
+                {level: isFr ? "Fructification" : "Fruiting", fertilizer: "MOP / K-Sulfate", herbicide: "N/A"}
+            ]
+        },
+        "leafy": {
+            title: isFr ? `Légume Feuille: ${plantName}` : `Leafy Vegetable: ${plantName}`,
+            description: isFr ? `Nécessite beaucoup d'eau et de nutriments pour le feuillage.` : `Requires constant moisture and high nitrogen for lush foliage.`,
+            planting: isFr ? `Semis direct ou en pépinière avec arrosage quotidien.` : `Direct mapping or nursery with daily watering.`,
+            fertilizer: isFr ? `Riche en Azote (Urée ou fumier de volaille).` : `High Nitrogen (Urea or pure poultry manure).`,
+            harvest: isFr ? `Récolte continue. Ne pas arracher les racines.` : `Continuous harvest. Pluck leaves carefully.`,
+            duration: isFr ? "30 - 60 Jours" : "30 - 60 Days",
+            growthStages: [
+                {level: isFr ? "Semis" : "Seeding", fertilizer: isFr ? "Fumier de fond" : "Base manure", herbicide: isFr ? "Paillage" : "Mulch"},
+                {level: isFr ? "Poussée foliaire" : "Vegetative", fertilizer: isFr ? "Top-dress Azote" : "Nitrogen Top-dress", herbicide: isFr ? "Manuel" : "Hand-picking"}
+            ]
+        },
+        "general": {
             title: isFr ? `Guide Expert IA: ${plantName}` : `AI Expert Guide: ${plantName} (Cameroon Zone)`,
             description: isFr ? `Feuille de route sur mesure pour ${plantName}. Optimisé pour notre sol.` : `Custom production roadmap for ${plantName}. Optimized for local soil.`,
             planting: isFr ? `Assurer un pH optimal du sol (5.5-7.0) pendant la saison des pluies.` : `For ${plantName}, ensure optimal soil pH (5.5-7.0) during rainy season.`,
             fertilizer: isFr ? `Recommandation Générale: Commencer avec NPK 15-15-15.` : "General Recommendation: Start with NPK 15-15-15.",
             harvest: isFr ? `Récolter quand les signes de maturité apparaissent.` : "Harvest when signs of physiological maturity appear.",
-            duration: isFr ? "Spécifique à la catégorie" : "Category Specific",
+            duration: isFr ? "Spécifique à la plante" : "Plant-Specific",
             growthStages: [
                 {level: isFr ? "Phase 1: Semis" : "Phase 1: Seedling", fertilizer: "NPK 15-15-15", herbicide: isFr ? "Pré-émergence" : "Pre-emergence"},
                 {level: isFr ? "Phase 2: Croissance" : "Phase 2: Growth", fertilizer: isFr ? "Boost d'Azote" : "Nitrogen Boost", herbicide: isFr ? "Sarclage" : "Selective Weeding"},
                 {level: isFr ? "Phase 3: Maturité" : "Phase 3: Maturity", fertilizer: isFr ? "Boost Potassium" : "Potassium Boost", herbicide: isFr ? "Nettoyage" : "Cleanup"}
             ]
         }
+    };
+
+    return {
+        status: "success",
+        data: templates[foundCategory] || templates["general"]
     };
 };
 
