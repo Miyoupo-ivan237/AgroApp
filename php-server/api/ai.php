@@ -2,6 +2,7 @@
 // php-server/api/ai.php
 require_once __DIR__ . '/../include/db.php';
 require_once __DIR__ . '/../include/helpers.php';
+require_once __DIR__ . '/../include/ai_engine.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     sendResponse(['error' => 'Method not allowed'], 405);
@@ -15,12 +16,14 @@ $uploadDir = '../uploads/';
 $fileName = 'plant-' . time() . '.' . pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
 $imagePath = $uploadDir . $fileName;
 
+$crop_guess = $_POST['crop'] ?? 'maize'; // Get the crop from the user input if possible
+
 if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
     // Correct paths for Python execution
     $absoluteImagePath = realpath($imagePath);
     $scriptPath = realpath('../../ai/plant_detector.py');
     
-    // Execute Python script with 'detect' command
+    // Execute Python script (with fallback)
     $command = "py \"$scriptPath\" detect \"$absoluteImagePath\"";
     $output = shell_exec($command);
     
@@ -29,22 +32,18 @@ if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
         unlink($absoluteImagePath);
     }
     
-    if (!$output) {
-        sendResponse(['error' => 'AI Module failed to process the image.'], 500);
+    // Attempt JSON parse
+    $result = null;
+    if ($output) {
+        $result = json_decode(trim($output), true);
     }
     
-    $result = json_decode(trim($output), true);
-    
-    if ($result === null) {
-        sendResponse(['error' => 'JSON Decode Error: ' . json_last_error_msg(), 'raw_output' => $output], 500);
-    }
-    
-    if (isset($result['status']) && $result['status'] === 'success') {
+    if ($result && isset($result['status']) && $result['status'] === 'success') {
         sendResponse([
             'status' => 'success',
             'disease' => $result['detected_issue'],
             'detected_issue' => $result['detected_issue'],
-            'confidence_score' => $result['confidence_score'], // Return numeric for client-side formatting
+            'confidence_score' => $result['confidence_score'],
             'solution' => $result['recommended_solution'],
             'recommended_solution' => $result['recommended_solution'],
             'treatment_window' => $result['fertilizer_schedule'],
@@ -52,7 +51,20 @@ if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
             'crop' => $result['crop'] ?? 'Unknown crop'
         ]);
     } else {
-        sendResponse(['error' => $result['message'] ?? 'Crop not recognized by AI.'], 400);
+        // AI Fallback using Rule-based engine
+        $instantDiagnosis = analyzePlantDisease($crop_guess);
+        sendResponse([
+            'status' => 'success',
+            'disease' => $instantDiagnosis['issue'],
+            'detected_issue' => $instantDiagnosis['issue'],
+            'confidence_score' => 0.55,
+            'solution' => $instantDiagnosis['solution'],
+            'recommended_solution' => $instantDiagnosis['solution'],
+            'treatment_window' => $instantDiagnosis['window'],
+            'fertilizer_schedule' => $instantDiagnosis['window'],
+            'crop' => $crop_guess,
+            'fallback' => true // Indicate this is a rule-based guess
+        ]);
     }
 } else {
     sendResponse(['error' => 'Failed to save uploaded image.'], 500);
