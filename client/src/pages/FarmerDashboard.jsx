@@ -1126,12 +1126,15 @@ export default function FarmerDashboard() {
                                                             </div>
                                                         </div>
                                                         <button 
-                                                            onClick={() => setSelectedGuide({
-                                                                ...aiGuideResult,
-                                                                category: "AI EXPERT HUB",
-                                                                color: "border-t-agro-orange",
-                                                                description: `${aiGuideResult.planting}\n\n${aiGuideResult.herbicide_info || ''}`
-                                                            })}
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                setSelectedGuide({
+                                                                    ...aiGuideResult,
+                                                                    category: "AI EXPERT HUB",
+                                                                    color: "border-t-agro-orange",
+                                                                    description: aiGuideResult.description || `${aiGuideResult.planting}\n\n${aiGuideResult.herbicide_info || ''}`
+                                                                });
+                                                            }}
                                                             className="flex items-center gap-4 px-8 py-5 bg-agro-orange text-white rounded-2xl font-black text-sm hover:scale-105 active:scale-95 transition-all shadow-xl shadow-agro-orange/20"
                                                         >
                                                             {language === 'en' ? 'OPEN FULL INTERACTIVE GUIDE' : 'OUVRIR LE GUIDE COMPLET'}
@@ -1188,7 +1191,6 @@ export default function FarmerDashboard() {
                                         </button>
                                     </div>
                                 )}
-
                             </div>
                         </motion.div>
                     )}

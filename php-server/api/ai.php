@@ -33,14 +33,23 @@ if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
         sendResponse(['error' => 'AI Module failed to process the image.'], 500);
     }
     
-    $result = json_decode($output, true);
+    $result = json_decode(trim($output), true);
+    
+    if ($result === null) {
+        sendResponse(['error' => 'JSON Decode Error: ' . json_last_error_msg(), 'raw_output' => $output], 500);
+    }
     
     if (isset($result['status']) && $result['status'] === 'success') {
         sendResponse([
+            'status' => 'success',
             'disease' => $result['detected_issue'],
-            'confidence' => ($result['confidence_score'] * 100) . '%',
+            'detected_issue' => $result['detected_issue'],
+            'confidence_score' => $result['confidence_score'], // Return numeric for client-side formatting
             'solution' => $result['recommended_solution'],
-            'treatment_window' => $result['fertilizer_schedule'] ?? 'Immediate Attention Required'
+            'recommended_solution' => $result['recommended_solution'],
+            'treatment_window' => $result['fertilizer_schedule'],
+            'fertilizer_schedule' => $result['fertilizer_schedule'],
+            'crop' => $result['crop'] ?? 'Unknown crop'
         ]);
     } else {
         sendResponse(['error' => $result['message'] ?? 'Crop not recognized by AI.'], 400);

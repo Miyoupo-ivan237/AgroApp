@@ -135,6 +135,7 @@ def get_plant_guide(plant_name):
     GUIDE_DATABASE = {
         "maize": {
             "title": "Maize (Corn) High-Yield Guide",
+            "description": "High-performing Maize requires deep plowing and early nitrogen application. Monitor for Fall Armyworm from germination.",
             "planting": "Plant in early March (March 15-31) for the main season. Space 75cm x 25cm.",
             "fertilizer": "Apply NPK 15-15-15 at planting. Follow with Urea at 4 and 7 weeks.",
             "harvest": "Harvest after 90-110 days when husks turn brown and dry.",
@@ -148,6 +149,7 @@ def get_plant_guide(plant_name):
         },
         "cassava": {
             "title": "Cassava Tubers Growth Manual",
+            "description": "Cassava is the most resilient crop. Best in sandy loam. Tuberization starts after month 3.",
             "planting": "Plant cuttings at 45 degree angle. Best in loose, sandy-loam soil.",
             "fertilizer": "Use NPK 12-12-17 or wood ash. Nitrogen is critical in first 3 months.",
             "harvest": "Ready in 10-12 months. Uproot carefully to avoid tuber damage.",
@@ -161,6 +163,7 @@ def get_plant_guide(plant_name):
         },
         "tomato": {
             "title": "Tomato Expert Production",
+            "description": "Intensive management required. High irrigation and staking recommended. Prune for size.",
             "planting": "Start in nursery for 3 weeks. Transplant in late afternoon to reduce stress.",
             "fertilizer": "High Phosphorus at transplanting. Calcium Nitrate during flowering.",
             "harvest": "Start picking at 'breaker' stage (first sign of pink) for shipping.",
@@ -174,6 +177,7 @@ def get_plant_guide(plant_name):
         },
         "beans": {
             "title": "Bush/Climbing Beans Guide",
+            "description": "Fast-growing protein source. Ensure good staking for climbing varieties to avoid rot.",
             "planting": "Double rows for climbing beans. 50cm between rows, 10cm between plants.",
             "fertilizer": "Fixes its own nitrogen but benefits from initial DAP or NPK.",
             "harvest": "Harvest pods when they are dry and seeds rattle inside.",
@@ -187,6 +191,7 @@ def get_plant_guide(plant_name):
         },
         "plantain": {
             "title": "Plantain & Banana Expert Guide",
+            "description": "Needs high rainfall or irrigation. Heavy organic manure application ensures large bunches.",
             "planting": "Plant in holes 60x60x60cm. Add 2kg of manure per hole.",
             "fertilizer": "Needs lots of Potassium. Apply 300g of MOP per mat per year.",
             "harvest": "Ready when top fruits turn slightly yellow (9-12 months).",
@@ -200,6 +205,7 @@ def get_plant_guide(plant_name):
         },
         "yam": {
             "title": "Yam Tuber Production Manual",
+            "description": "High-value crop requiring manual labor for ridge/mound preparation and staking.",
             "planting": "Mound or Ridge planting. 1m between mounds.",
             "fertilizer": "NPK 15-15-15 + Organic matter. Avoid direct contact with setts.",
             "harvest": "When vines dry completely (6-9 months).",
@@ -213,6 +219,7 @@ def get_plant_guide(plant_name):
         },
         "pepper": {
             "title": "Hot Pepper (Chili) Success",
+            "description": "Very profitable but sensitive to water stress. High phosphorus helps blossom set.",
             "planting": "Nursery for 6 weeks. Transplant at 50cm x 50cm.",
             "fertilizer": "NPK 15-15-15 + Urea. Needs Calcium to avoid rot.",
             "harvest": "Once they reach desired color/size (start at 3 months).",
@@ -226,6 +233,7 @@ def get_plant_guide(plant_name):
         },
         "onion": {
             "title": "Onion Bulb Production",
+            "description": "Sensitive to competing weeds. Bulbing requires correct nitrogen-potassium balance.",
             "planting": "Sow in nursery. Transplant after 6-8 weeks. 10cm apart.",
             "fertilizer": "Needs Sulfur. Use Ammonium Sulfate as Nitrogen source.",
             "harvest": "When 50-70% of necks break and tops fall over.",
@@ -239,6 +247,7 @@ def get_plant_guide(plant_name):
         },
         "coffee": {
             "title": "Coffee (Arabica/Robusta) Guide",
+            "description": "Perennial crop. Requires pruning and regular organic management for high berry quality.",
             "planting": "Partial shade is best for young plants. Space 3m x 3m.",
             "fertilizer": "NPK 20-10-10 or 17-17-17. Apply twice a year.",
             "harvest": "Hand-pick only deep red cherries.",
@@ -252,6 +261,7 @@ def get_plant_guide(plant_name):
         },
         "rice": {
             "title": "Lowland/Upland Rice Manual",
+            "description": "Requires constant moisture. Nitrogen split application is vital for panicle filling.",
             "planting": "Direct seeding or transplanting (20cm x 20cm).",
             "fertilizer": "Nitrogen split (Basal, Tillering, Panicle Initiation).",
             "harvest": "80% of grains in panicle turn straw-colored.",
@@ -265,6 +275,7 @@ def get_plant_guide(plant_name):
         },
         "cocoa": {
             "title": "Cocoa (Cacao) Production Guide",
+            "description": "Foundational crop for Cameroon. Needs tropical humidity and protection from Black Pod.",
             "planting": "Plant in shaded nurseries then transplant under permanent shade (3m x 3m).",
             "fertilizer": "NPK 0-23-19 (high Phosphorus/Potassium) applied in circular trenches.",
             "harvest": "Pick ripe yellow/orange pods. Avoid damaging the flower cushion.",
@@ -278,6 +289,7 @@ def get_plant_guide(plant_name):
         },
         "oil palm": {
             "title": "Oil Palm (Elite Varieties)",
+            "description": "Steady income source. Requires careful ring weeding and balanced magnesium application.",
             "planting": "Triangular spacing 9m x 9m. Dig large holes (60cm) with compost.",
             "fertilizer": "Heavy needs for Potassium and Magnesium (MOP & Kieserite).",
             "harvest": "Cut clusters when at least 5 fruits have detached naturally.",
@@ -291,6 +303,7 @@ def get_plant_guide(plant_name):
         },
         "avocado": {
             "title": "Avocado (Pear) Export Guide",
+            "description": "High-value fruit. Vulnerable to root rot; ensure excellent drainage.",
             "planting": "Best in well-drained volcanic soil. Plant 7m x 7m apart.",
             "fertilizer": "Nitrogen in early years, more Potassium during fruit development.",
             "harvest": "Harvest when full-sized but still firm. Will ripen off the tree.",
@@ -304,6 +317,7 @@ def get_plant_guide(plant_name):
         },
         "cabbage": {
             "title": "Cabbage (Market Head)",
+            "description": "Fast turn over. High nitrogen needs. Monitor for heart rot.",
             "planting": "4 weeks in nursery. Space 45cm x 45cm in the field.",
             "fertilizer": "High Nitrogen for leafy growth. Side-dress with Urea at 4 weeks.",
             "harvest": "Cut once the head is firm and reaches desired size.",
@@ -331,6 +345,7 @@ def get_plant_guide(plant_name):
         "status": "success",
         "guide_data": {
             "title": f"AI Expert Guide: {plant_name.capitalize()} (Cameroon Zone)",
+            "description": f"Custom production roadmap for {plant_name}. Focused on improving local soil quality and maximizing yield using sustainable methods.",
             "planting": f"For {plant_name}, ensure optimal soil pH (5.5-7.0). Best planted during the rainy season onset in your specific Cameroon region.",
             "fertilizer": "General Recommendation: Start with NPK 15-15-15 at planting. Use Urea for leafy growth and Potassium-rich blends during fruit/tuber development.",
             "harvest": f"Harvest {plant_name} when signs of physiological maturity appear (dried leaves, color change, or size).",
