@@ -18,5 +18,7 @@ const upload = multer({ storage: storage });
 
 router.post('/detect', upload.single('image'), aiController.detectDisease);
 router.post('/guide', aiController.getPlantGuide);
+router.post('/quiz-gen', aiController.generateQuiz);
+router.post('/bag_scan', upload.single('image'), aiController.scanBags);
 
 module.exports = router;

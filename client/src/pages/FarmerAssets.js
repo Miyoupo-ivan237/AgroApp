@@ -73,3 +73,15 @@ export const FR_MARKET_PRICES = [
     { name: 'Oignons', price: '450 CFA', trend: 'down', region: 'Maroua', unit: 'kg' },
     { name: 'Banane Plantain', price: '3200 CFA', trend: 'up', region: 'Njombé', unit: 'Régime' }
 ];
+
+export const AI_TIPS = [
+    { id: 1, title: "Soil Moisture Alert", tip: "West region rainfall is increasing. Reduce irrigation for your Tubers to avoid root rot.", icon: "droplets" },
+    { id: 2, title: "Market Spike Ready?", tip: "Tomato prices in Mbouda are up 15%. Consider harvesting your early 'breaker' stage crops now.", icon: "trending-up" },
+    { id: 3, title: "Pest Warning", tip: "Fall Armyworm sightings reported in nearby Littoral. Inspect your Maize leaves for small holes daily.", icon: "alert-triangle" }
+];
+
+export const AI_FR_TIPS = [
+    { id: 1, title: "Alerte Humidité", tip: "Les pluies augmentent à l'Ouest. Réduisez l'irrigation des tubercules pour éviter la pourriture.", icon: "droplets" },
+    { id: 2, title: "Opportunité Marché", tip: "Le prix des tomates à Mbouda a grimpé de 15%. Récoltez vos fruits au stade 'vireux' maintenant.", icon: "trending-up" },
+    { id: 3, title: "Alerte Ravageurs", tip: "Chenille légionnaire signalée au Littoral. Inspectez vos feuilles de maïs quotidiennement.", icon: "alert-triangle" }
+];

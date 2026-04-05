@@ -380,5 +380,33 @@ if __name__ == "__main__":
         plant_name = sys.argv[2]
         result = get_plant_guide(plant_name)
         print(json.dumps(result, indent=4))
+    elif command == "bag_scan" and len(sys.argv) >= 3:
+        img_path = sys.argv[2]
+        # Simulate Bag Counting from image
+        result = {
+            "status": "success",
+            "count": 14 if "corn" in img_path.lower() or "maize" in img_path.lower() else 8,
+            "weight": "700 kg" if "corn" in img_path.lower() or "maize" in img_path.lower() else "400 kg",
+            "crop": "White Corn" if "corn" in img_path.lower() or "maize" in img_path.lower() else "Cassava Tubers",
+            "grading": "A" if "corn" in img_path.lower() or "maize" in img_path.lower() else "B",
+            "confidence": 0.984
+        }
+        print(json.dumps(result, indent=4))
+    elif command == "quiz_gen" and len(sys.argv) >= 3:
+        crop_name = sys.argv[2].lower()
+        # Mock Quiz Generation
+        if "corn" in crop_name or "maize" in crop_name:
+            quiz = [
+                {"question": "When is the best time to plant Maize in Cameroon?", "options": ["March-April", "October-November", "December-January"], "answer": "March-April"},
+                {"question": "Which herbicide is used as pre-emergence for Maize?", "options": ["Urea", "LADABA", "Neem Oil"], "answer": "LADABA"},
+                {"question": "How long does common Maize take to mature?", "options": ["6 months", "3-4 months", "1 year"], "answer": "3-4 months"}
+            ]
+        else:
+            quiz = [
+                {"question": f"Is {crop_name} best grown in ridges or mounds?", "options": ["Ridges", "Mounds", "Either"], "answer": "Ridges"},
+                {"question": "What is the primary fertilizer for initial growth?", "options": ["Urea", "NPK 15-15-15", "MOP"], "answer": "NPK 15-15-15"},
+                {"question": "How do you identify maturity?", "options": ["Leaves turn yellow", "Fruit size", "Both"], "answer": "Both"}
+            ]
+        print(json.dumps({"status": "success", "quiz": quiz}, indent=4))
     else:
         print(json.dumps({"error": "Command not recognized or missing parameter."}))

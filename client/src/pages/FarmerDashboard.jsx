@@ -9,12 +9,13 @@ import {
     ArrowUpRight, Search, AlertCircle, Clock,
     Zap, Plus, Trash2, Upload, Loader2, Shield, Camera,
     Bell, MessageCircle, Star, TrendingUp, CloudSun,
-    Warehouse, Users, BarChart
+    Warehouse, Users, BarChart, Sparkles, Droplets, AlertTriangle,
+    Mic, Lightbulb
 } from 'lucide-react';
 
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
-import { CAMEROON_SEASONAL_DATA, LEARNING_HUB_DATA, MARKET_PRICES, FR_MARKET_PRICES } from './FarmerAssets';
+import { CAMEROON_SEASONAL_DATA, LEARNING_HUB_DATA, MARKET_PRICES, FR_MARKET_PRICES, AI_TIPS, AI_FR_TIPS } from './FarmerAssets';
 
 
 
@@ -38,6 +39,23 @@ export default function FarmerDashboard() {
     const [selectedGuide, setSelectedGuide] = useState(null);
     const [showCalendarForm, setShowCalendarForm] = useState(false);
     const [calendarForm, setCalendarForm] = useState({ name: '', plantedDate: '', nextTask: '', taskDate: '' });
+    const [activeQuiz, setActiveQuiz] = useState(null);
+    const [quizLoading, setQuizLoading] = useState(false);
+    const [quizScore, setQuizScore] = useState(null);
+    
+    const handleGenerateQuiz = async (cropName) => {
+        setQuizLoading(true);
+        setActiveQuiz(null);
+        setQuizScore(null);
+        try {
+            const res = await api.post('ai/quiz-gen', { crop_name: cropName });
+            setActiveQuiz(res.data.quiz);
+        } catch (err) {
+            console.error("Quiz generation failed", err);
+        } finally {
+            setQuizLoading(false);
+        }
+    };
     
     // Wallet State
     const [withdrawForm, setWithdrawForm] = useState({ amount: '', phone: '', method: 'Orange Money' });
@@ -78,24 +96,27 @@ export default function FarmerDashboard() {
     const [bagScanState, setBagScanState] = useState('idle'); // idle, scanning, result
     const [bagResult, setBagResult] = useState(null);
 
-    const handleBagScan = (e) => {
+    const handleBagScan = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
         
         setBagScanState('scanning');
         setBagResult(null);
 
-        // Simulate AI Processing (Vision API)
-        setTimeout(() => {
-            setBagResult({
-                count: 14,
-                weight: '700 kg',
-                crop: 'White Corn',
-                status: 'Graded (A)',
-                confidence: '98.4%'
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const res = await api.post('ai/bag_scan', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
             });
+            setBagResult(res.data);
             setBagScanState('result');
-        }, 3500);
+        } catch (err) {
+            console.error("Bag scan failed", err);
+            setBagScanState('idle');
+            alert(language === 'en' ? "Bag Scan Failed. Please try a clearer photo." : "Le scan des sacs a échoué. Essayez une photo plus claire.");
+        }
     };
 
     // Calendar State
@@ -1042,27 +1063,40 @@ export default function FarmerDashboard() {
                                     </p>
                                     
                                     <div className="relative mb-6 flex flex-col md:flex-row gap-4">
-                                        <div className="relative flex-1">
+                                        <div className="relative flex-1 group">
+                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-agro-orange group-focus-within:scale-110 transition-transform">
+                                                <Search size={24} />
+                                            </div>
                                             <input 
                                                 type="text" 
-                                                placeholder={language === 'en' ? "Enter ANY plant name (e.g. Cocoa, Pepper, Avocado)..." : "Entrez le NOM d'une plante (ex: Cacao, Poivre, Avocat)..."} 
+                                                placeholder={language === 'en' ? "Search 100+ Crops with AI..." : "Rechercher 100+ Cultures..."} 
                                                 value={searchQuery}
                                                 onChange={e => {
                                                     setSearchQuery(e.target.value);
                                                     if (!e.target.value) setAiGuideResult(null);
                                                 }}
                                                 onKeyDown={e => e.key === 'Enter' && handleAskAI()}
-                                                className="w-full bg-slate-50 border-2 border-slate-100 rounded-[2rem] px-8 py-6 pr-20 focus:ring-4 focus:ring-agro-orange/10 transition-all font-black text-xl shadow-inner text-slate-700" 
+                                                className="w-full bg-slate-50 border-2 border-slate-100 rounded-[2rem] pl-16 pr-20 py-6 focus:ring-4 focus:ring-agro-orange/10 transition-all font-black text-xl shadow-inner text-slate-700" 
                                             />
+                                            <button className="absolute right-6 top-1/2 -translate-y-1/2 p-3 bg-white rounded-2xl text-slate-300 hover:text-agro-orange transition-colors">
+                                                <Mic size={24} />
+                                            </button>
                                         </div>
                                         <button 
                                             onClick={handleAskAI}
                                             disabled={aiGuideLoading}
-                                            className="px-10 py-6 bg-slate-900 text-white rounded-[2rem] font-black text-sm hover:bg-agro-orange transition-all shadow-xl active:scale-95 flex items-center justify-center gap-3 disabled:opacity-50"
+                                            className="px-10 py-6 bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest hover:bg-agro-orange transition-all shadow-xl active:scale-95 flex items-center justify-center gap-3 disabled:opacity-50"
                                         >
                                             {aiGuideLoading ? <Loader2 size={24} className="animate-spin"/> : <Zap size={24}/>}
-                                            {language === 'en' ? 'ASK AI GUIDE' : 'DEMANDER À L\'IA'}
+                                            {language === 'en' ? 'GENERATE AI GUIDE' : 'GÉNÉRER GUIDE IA'}
                                         </button>
+                                    </div>
+
+                                    <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-slate-400 uppercase tracking-widest mt-8">
+                                        <span className="flex items-center gap-2 mr-2"><Lightbulb size={16} className="text-agro-yellow"/> {language === 'en' ? 'TRENDING:' : 'TENDANCES:'}</span>
+                                        {['Maize', 'Cassava', 'Plantain', 'Pepper', 'Cocoa'].map(t => (
+                                            <button key={t} onClick={() => { setSearchQuery(t); }} className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-full hover:bg-white hover:border-agro-orange transition-all">{t}</button>
+                                        ))}
                                     </div>
 
                                     <AnimatePresence>
@@ -1794,7 +1828,60 @@ export default function FarmerDashboard() {
                                             </div>
                                         )}
 
-                                        {/* 5. Economic & Target Impact */}
+                                        {/* 5. AI Knowledge Quiz Section */}
+                                        <div className="p-10 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200 text-center">
+                                            {!activeQuiz ? (
+                                                <div className="max-w-md mx-auto py-4">
+                                                    <div className="w-20 h-20 bg-agro-green/10 rounded-full flex items-center justify-center mx-auto mb-6 text-agro-green">
+                                                        <GraduationCap size={40} />
+                                                    </div>
+                                                    <h4 className="text-2xl font-black text-slate-800 tracking-tighter uppercase italic mb-4">{language === 'en' ? 'Test Your Knowledge' : 'Testez Vos Connaissances'}</h4>
+                                                    <p className="text-slate-400 font-bold mb-8 uppercase text-xs tracking-widest">{language === 'en' ? 'Take a quick 3-question quiz generated by AI to earn a Certification Badge.' : 'Passez un quiz de 3 questions généré par l\'IA.'}</p>
+                                                    <button 
+                                                        disabled={quizLoading}
+                                                        onClick={() => handleGenerateQuiz(selectedGuide.title)}
+                                                        className="px-10 py-5 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-agro-green transition-all shadow-xl disabled:opacity-50 flex items-center gap-3 mx-auto"
+                                                    >
+                                                        {quizLoading ? <Loader2 size={18} className="animate-spin"/> : <Zap size={18}/>}
+                                                        {language === 'en' ? 'START AI QUIZ' : 'DÉMARRER LE QUIZ'}
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <div className="text-left space-y-8">
+                                                    <div className="flex justify-between items-center mb-4">
+                                                        <h4 className="text-2xl font-black text-slate-900 uppercase italic">{language === 'en' ? 'AI Certification Quiz' : 'Quiz de Certification IA'}</h4>
+                                                        <span className="bg-agro-green text-white px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase">3 Questions remaining</span>
+                                                    </div>
+                                                    {activeQuiz.map((q, idx) => (
+                                                        <div key={idx} className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
+                                                            <p className="font-black text-slate-800 text-lg mb-6 leading-tight">{idx + 1}. {q.question}</p>
+                                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                                {q.options.map((opt, oIdx) => (
+                                                                    <button 
+                                                                        key={oIdx}
+                                                                        onClick={() => {
+                                                                            if (opt === q.answer) alert(language === 'en' ? 'Correct!' : 'Correct !');
+                                                                            else alert(language === 'en' ? 'Wrong Answer' : 'Mauvaise Réponse');
+                                                                        }}
+                                                                        className="p-4 bg-slate-50 rounded-2xl border-2 border-transparent hover:border-agro-green hover:bg-agro-green/5 transition-all text-sm font-bold text-slate-600 text-center"
+                                                                    >
+                                                                        {opt}
+                                                                    </button>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                    <button 
+                                                        onClick={() => setActiveQuiz(null)}
+                                                        className="w-full py-4 text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] hover:text-red-500 transition-colors"
+                                                    >
+                                                        {language === 'en' ? 'Cancel Quiz' : 'Annuler'}
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* 6. Economic & Target Impact */}
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
                                             <div className="p-10 bg-slate-900 text-white rounded-[3rem] relative overflow-hidden group shadow-2xl">
                                                 <div className="absolute top-0 right-0 w-32 h-32 bg-agro-green/20 rounded-full blur-3xl group-hover:scale-150 transition-transform"></div>

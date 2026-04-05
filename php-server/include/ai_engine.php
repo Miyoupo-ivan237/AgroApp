@@ -119,18 +119,87 @@ function generatePlantGuide($plant_name, $lang = 'en') {
                 ]
             ]
         ],
-        "oil palm" => [
+        "coffee" => [
             "en" => [
-                "title" => "Oil Palm Success Guide",
-                "description" => "Requires magnesium and potassium balance.",
-                "planting" => "Space 9m x 9m in triangle pattern.",
-                "fertilizer" => "NPK 12-12-17-2 + MOP.",
-                "harvest" => "Use specialized harvesting chisel or knife.",
-                "herbicide_info" => "Maintain clean circles around the palms.",
-                "duration" => "3 Years",
+                "title" => "Coffee Expert Guide",
+                "description" => "Perennial crop. Requires pruning and organic management.",
+                "planting" => "Partial shade is best for young plants. Space 3m x 3m.",
+                "fertilizer" => "NPK 20-10-10 or 17-17-17.",
+                "harvest" => "Hand-pick deep red cherries.",
+                "herbicide_info" => "Ring weeding around the base.",
+                "duration" => "3-4 Years",
                 "growthStages" => [
-                    ["level" => "Immature", "fertilizer" => "NPK 15-15-15", "herbicide" => "Ring weeding"],
-                    ["level" => "Production", "fertilizer" => "MOP + Urea", "herbicide" => "Ring weeding"]
+                    ["level" => "Juvenile", "fertilizer" => "NPK 15-15-15", "herbicide" => "Ring weeding"],
+                    ["level" => "Production", "fertilizer" => "NPK 20-10-10", "herbicide" => "Manual"]
+                ]
+            ],
+            "fr" => [
+                "title" => "Guide Expert : Culture du Café",
+                "description" => "Culture pérenne. Nécessite une taille et une gestion bio.",
+                "planting" => "L'ombre partielle est idéale. Espacement 3m x 3m.",
+                "fertilizer" => "NPK 20-10-10 ou 17-17-17.",
+                "harvest" => "Cueillir les cerises bien rouges.",
+                "herbicide_info" => "Sarclage en rond à la base.",
+                "duration" => "3-4 Ans",
+                "growthStages" => [
+                    ["level" => "Juvenile", "fertilizer" => "NPK 15-15-15", "herbicide" => "Sarclage"],
+                    ["level" => "Production", "fertilizer" => "NPK 20-10-10", "herbicide" => "Manuel"]
+                ]
+            ]
+        ],
+        "rice" => [
+            "en" => [
+                "title" => "Rice (Lowland/Upland) Manual",
+                "description" => "Requires constant moisture. Nitrogen split application is vital.",
+                "planting" => "Direct seeding or transplanting (20cm x 20cm).",
+                "fertilizer" => "Nitrogen split (Basal, Tillering, Panicle).",
+                "harvest" => "80% of grains in panicle turn straw-colored.",
+                "herbicide_info" => "Flood control suppresses weeds.",
+                "duration" => "4-5 Months",
+                "growthStages" => [
+                    ["level" => "Tillering", "fertilizer" => "Urea", "herbicide" => "Flood"],
+                    ["level" => "Ripening", "fertilizer" => "N/A", "herbicide" => "N/A"]
+                ]
+            ],
+            "fr" => [
+                "title" => "Manuel du Riz (Bas-fond/Plateau)",
+                "description" => "Nécessite une humidité constante. Le fractionnement de l'azote est vital.",
+                "planting" => "Semis direct ou repiquage (20cm x 20cm).",
+                "fertilizer" => "Fractionnement Azote (Base, Tallage, Panicule).",
+                "harvest" => "Récolte quand 80% des grains jaunissent.",
+                "herbicide_info" => "Contrôle d'eau supprime mauvaises herbes.",
+                "duration" => "4-5 Mois",
+                "growthStages" => [
+                    ["level" => "Tallage", "fertilizer" => "Urée", "herbicide" => "Contrôle d'eau"],
+                    ["level" => "Maturation", "fertilizer" => "N/A", "herbicide" => "N/A"]
+                ]
+            ]
+        ],
+        "avocado" => [
+            "en" => [
+                "title" => "Avocado (Pear) Export Manual",
+                "description" => "Grafted trees produce fruits in 3-4 years.",
+                "planting" => "Plant 7m x 7m apart in well-drained soil.",
+                "fertilizer" => "Needs Boron and Zinc during flowering.",
+                "harvest" => "Harvest firm; ripens off the tree.",
+                "herbicide_info" => "Mulching is vital to protect surface roots.",
+                "duration" => "3-4 Years",
+                "growthStages" => [
+                    ["level" => "Establishment", "fertilizer" => "NPK 20-10-10", "herbicide" => "Mulching"],
+                    ["level" => "Fruiting", "fertilizer" => "Boron spray", "herbicide" => "N/A"]
+                ]
+            ],
+            "fr" => [
+                "title" => "Manuel : Avocatier (Exportation)",
+                "description" => "Les arbres greffés produisent en 3-4 ans.",
+                "planting" => "Planter à 7m x 7m en sol bien drainé.",
+                "fertilizer" => "Besoins en Bore et Zinc à la floraison.",
+                "harvest" => "Récolter ferme; mûrit après cueillette.",
+                "herbicide_info" => "Paillage vital pour protéger racines.",
+                "duration" => "3-4 Ans",
+                "growthStages" => [
+                    ["level" => "Établissement", "fertilizer" => "NPK 20-10-10", "herbicide" => "Paillage"],
+                    ["level" => "Fructification", "fertilizer" => "Spray Bore", "herbicide" => "N/A"]
                 ]
             ]
         ]
@@ -218,34 +287,59 @@ function generatePlantGuide($plant_name, $lang = 'en') {
 /* 
 AI DIAGNOSIS ENGINE (Rule-based)
 */
-function analyzePlantDisease($crop_name) {
+function analyzePlantDisease($crop_name, $lang = 'en') {
     $crop_name = strtolower(trim($crop_name));
     
     $common_issues = [
         "maize" => [
-            "issue" => "Possible Fall Armyworm or Nitrogen Deficiency",
-            "solution" => "Use EMAMECTINE BENZOATE for worms. Apply Top-dressing Urea if leaves are yellowing.",
-            "window" => "3-6 Weeks after planting"
+            "en" => [
+                "issue" => "Possible Fall Armyworm or Nitrogen Deficiency",
+                "solution" => "Use EMAMECTINE BENZOATE for worms. Apply Top-dressing Urea if leaves are yellowing.",
+                "window" => "3-6 Weeks after planting"
+            ],
+            "fr" => [
+                "issue" => "Chenille Légionnaire ou Carence en Azote",
+                "solution" => "Utiliser EMAMECTINE BENZOATE pour les chenilles. Appliquer Urée si les feuilles jaunissent.",
+                "window" => "3-6 Semaines après semis"
+            ]
         ],
         "tomato" => [
-            "issue" => "Blight or Blossom End Rot",
-            "solution" => "Apply Mancozeb for blight. Use Calcium Nitrate for end rot (brown bottoms).",
-            "window" => "During flowering/fruiting"
+            "en" => [
+                "issue" => "Blight or Blossom End Rot",
+                "solution" => "Apply Mancozeb for blight. Use Calcium Nitrate for end rot (brown bottoms).",
+                "window" => "During flowering/fruiting"
+            ],
+            "fr" => [
+                "issue" => "Mildiou ou Pourriture Apicale",
+                "solution" => "Appliquer Mancozeb pour le mildiou. Utiliser Nitrate de Calcium pour la pourriture.",
+                "window" => "Pendant floraison/fructification"
+            ]
         ],
         "cassava" => [
-            "issue" => "Cassava Mosaic Virus",
-            "solution" => "Uproot and burn infected plants. Use CMD-resistant varieties like TMS-92/0326.",
-            "window" => "1-4 Months after planting"
+            "en" => [
+                "issue" => "Cassava Mosaic Virus",
+                "solution" => "Uproot and burn infected plants. Use CMD-resistant varieties.",
+                "window" => "1-4 Months after planting"
+            ],
+            "fr" => [
+                "issue" => "Mosaïque du Manioc",
+                "solution" => "Arracher et brûler les plants infectés. Utiliser des variétés résistantes.",
+                "window" => "1-4 Mois après semis"
+            ]
         ]
     ];
     
-    foreach ($common_issues as $crop => $data) {
+    foreach ($common_issues as $crop => $langs) {
         if (strpos($crop_name, $crop) !== false) {
-            return $data;
+            return $langs[$lang] ?? $langs['en'];
         }
     }
     
-    return [
+    return $lang === 'fr' ? [
+        "issue" => "Stress Environnemental / Déficit Nutritif",
+        "solution" => "Optimiser l'irrigation et appliquer NPK 15-15-15 équilibré. Vérifier le pH du sol.",
+        "window" => "Attention immédiate"
+    ] : [
         "issue" => "Environmental Stress / Nutrient Deficit",
         "solution" => "Optimize irrigation and apply balanced NPK 15-15-15. Check soil pH.",
         "window" => "Immediate attention"

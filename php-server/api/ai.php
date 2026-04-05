@@ -52,7 +52,8 @@ if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
         ]);
     } else {
         // AI Fallback using Rule-based engine
-        $instantDiagnosis = analyzePlantDisease($crop_guess);
+        $lang = $_POST['lang'] ?? 'en';
+        $instantDiagnosis = analyzePlantDisease($crop_guess, $lang);
         sendResponse([
             'status' => 'success',
             'disease' => $instantDiagnosis['issue'],
@@ -63,7 +64,7 @@ if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
             'treatment_window' => $instantDiagnosis['window'],
             'fertilizer_schedule' => $instantDiagnosis['window'],
             'crop' => $crop_guess,
-            'fallback' => true // Indicate this is a rule-based guess
+            'fallback' => true 
         ]);
     }
 } else {
