@@ -129,18 +129,18 @@ export default function Landing() {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                        className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4"
+                        transition={{ delay: 0.4 }}
+                        className="mt-8 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-900/10 relative w-full max-w-xl aspect-[16/9] border-8 border-white group"
                     >
-                        <div className="flex -space-x-3">
-                            {[1,2,3,4].map(i => (
-                                <div key={i} className="w-12 h-12 rounded-full border-4 border-white bg-slate-200 overflow-hidden shadow-lg">
-                                    <img src={`https://i.pravatar.cc/100?img=${i+20}`} alt="user" />
-                                </div>
-                            ))}
-                        </div>
-                        <div className="text-sm font-bold text-slate-600">
-                            Trusted by <span className="text-slate-900 font-black">10,000+</span> users
+                        <img 
+                            src="/cameroon_agriculture.png" 
+                            alt="Agriculture in Cameroon" 
+                            className="w-full h-full object-cover relative z-10 group-hover:scale-105 transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent z-20 pointer-events-none"></div>
+                        <div className="absolute bottom-6 left-8 z-30">
+                            <h3 className="text-white font-black text-2xl tracking-tighter drop-shadow-md">Cameroonian Agriculture</h3>
+                            <p className="text-white/80 font-black text-[10px] tracking-widest uppercase mt-1 drop-shadow-sm">Modern & Sustainable</p>
                         </div>
                     </motion.div>
                 </div>

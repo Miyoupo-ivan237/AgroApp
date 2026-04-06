@@ -91,6 +91,7 @@ export default function FarmerDashboard() {
     const [previewUrl, setPreviewUrl] = useState(null);
     const [analyzing, setAnalyzing] = useState(false);
     const [diagnosis, setDiagnosis] = useState(null);
+    const [aiPlantName, setAiPlantName] = useState('');
 
     // AI Bag Scan State
     const [bagScanState, setBagScanState] = useState('idle'); // idle, scanning, result
@@ -205,6 +206,7 @@ export default function FarmerDashboard() {
         
         const formData = new FormData();
         formData.append('image', selectedFile);
+        formData.append('plant_name', aiPlantName);
 
         try {
             const res = await api.post('ai/detect', formData, {
@@ -654,6 +656,16 @@ export default function FarmerDashboard() {
                                                     </div>
                                                 )}
                                             </div>
+                                        </div>
+
+                                        <div className="mt-6 relative">
+                                            <input 
+                                                type="text" 
+                                                placeholder={language === 'en' ? 'What plant is this? (Optional)' : 'Quelle plante est-ce ? (Optionnel)'}
+                                                className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-6 py-4 font-bold text-slate-700 focus:outline-none focus:border-agro-green transition-all"
+                                                value={aiPlantName}
+                                                onChange={(e) => setAiPlantName(e.target.value)}
+                                            />
                                         </div>
 
                                         <button 

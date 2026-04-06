@@ -12,7 +12,7 @@ exports.detectDisease = async (req, res) => {
     }
 
     try {
-        const result = await aiService.detectDisease(req.file.path);
+        const result = await aiService.detectDisease(req.file.path, req.body.plant_name);
         
         // Clean up the uploaded file
         if (req.file && fs.existsSync(req.file.path)) {
