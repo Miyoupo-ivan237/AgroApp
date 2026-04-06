@@ -290,9 +290,9 @@ export default function BuyerDashboard() {
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                                 {crops.filter(c => 
-                                    c.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                                    c.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                    (c.region_location || c.region || '').toLowerCase().includes(searchTerm.toLowerCase())
+                                    (c?.name || '').toLowerCase().includes((searchTerm || '').toLowerCase()) || 
+                                    (c?.category || '').toLowerCase().includes((searchTerm || '').toLowerCase()) ||
+                                    (c?.region_location || c?.region || '').toLowerCase().includes((searchTerm || '').toLowerCase())
                                 ).map((crop) => (
                                     <div key={crop.id} className="glass-card p-6 group transition-all duration-500">
                                         <div className="h-40 bg-slate-50 rounded-2xl mb-6 relative flex items-center justify-center">

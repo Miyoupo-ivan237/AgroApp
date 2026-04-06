@@ -61,67 +61,8 @@ export default function Login() {
 
     return (
         <div className="min-h-screen bg-mesh flex items-center justify-center p-4">
-            <div className="max-w-6xl w-full grid lg:grid-cols-2 gap-0 overflow-hidden rounded-[2.5rem] shadow-premium bg-white">
+            <div className="max-w-md w-full overflow-hidden rounded-[2.5rem] shadow-premium bg-white">
                 
-                {/* Visual Side */}
-                <div className="hidden lg:block relative bg-agro-green overflow-hidden">
-                    <div className="absolute inset-0 opacity-40">
-                        <img 
-                            src={premiumHero} 
-                            alt="Sustainable Farming" 
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-br from-agro-green via-agro-green/80 to-transparent"></div>
-                    
-                    <div className="relative h-full flex flex-col justify-between p-12 text-white">
-                        <motion.div 
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="flex items-center gap-3"
-                        >
-                            <div className="w-12 h-12 glass flex items-center justify-center rounded-2xl shadow-glow text-white">
-                                <Sprout size={28} />
-                            </div>
-                            <span className="text-2xl font-bold tracking-tighter uppercase font-outfit">AgroConnect CM</span>
-                        </motion.div>
-
-                        <div className="space-y-6">
-                            <motion.h2 
-                                initial={{ opacity: 0, x: -30 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.2 }}
-                                className="text-5xl heading-serif leading-tight"
-                            >
-                                Cultivating <br/>Digital <br/>Prosperity.
-                            </motion.h2>
-                            <motion.p 
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.4 }}
-                                className="text-lg text-agro-sand/80 max-w-sm leading-relaxed"
-                            >
-                                Bridging the gap between the soil and the shelf. Join the digital revolution of Cameroon's agriculture.
-                            </motion.p>
-                        </div>
-
-                        <motion.div 
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.6 }}
-                            className="flex items-center gap-6"
-                        >
-                            <div className="flex -space-x-3">
-                                {[1,2,3,4].map(i => (
-                                    <div key={i} className="w-10 h-10 rounded-full border-2 border-agro-green bg-slate-200 overflow-hidden shadow-lg">
-                                        <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt="user" />
-                                    </div>
-                                ))}
-                            </div>
-                            <p className="text-sm font-medium text-agro-sand/90">Joined by 10k+ farmers & buyers</p>
-                        </motion.div>
-                    </div>
-                </div>
 
                 {/* Form Side */}
                 <div className="p-8 lg:p-16 flex flex-col justify-center bg-white relative">

@@ -32,12 +32,7 @@ export default function Landing() {
         }
     }, [user, navigate]);
 
-    const scrollToSection = (id) => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
+    
 
     const handleAuth = async (e) => {
         e.preventDefault();
@@ -92,8 +87,8 @@ export default function Landing() {
                     </span>
                 </div>
                 <div className="hidden md:flex items-center gap-8 text-xs font-black text-slate-400 uppercase tracking-widest">
-                    <button onClick={() => scrollToSection('how-it-works')} className="hover:text-agro-green transition-all hover:scale-105 active:scale-95">How it works</button>
-                    <button onClick={() => scrollToSection('safety')} className="hover:text-agro-green transition-all hover:scale-105 active:scale-95">Safety</button>
+                    <a href="#how-it-works" className="hover:text-agro-green transition-all hover:scale-105 active:scale-95">How it works</a>
+                    <a href="#safety" className="hover:text-agro-green transition-all hover:scale-105 active:scale-95">Safety</a>
                 </div>
             </header>
 
