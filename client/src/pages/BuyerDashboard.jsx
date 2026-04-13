@@ -5,7 +5,7 @@ import {
     ArrowRight, Tag, LayoutDashboard, Wallet, 
     Clock, Package, Star, ShieldCheck, CreditCard,
     TrendingUp, Bell, Truck, Plus, 
-    Edit2, Trash2, CheckCircle, MessageCircle
+    Edit2, Trash2, CheckCircle, MessageCircle, Menu, X
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -24,6 +24,7 @@ export default function BuyerDashboard() {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('ORANGE');
     const [selectedOrder, setSelectedOrder] = useState(null);
+    const [showSidebar, setShowSidebar] = useState(false);
 
     const handleOrderAction = (order) => {
         setSelectedOrder(order);
@@ -167,9 +168,17 @@ export default function BuyerDashboard() {
     };
 
     return (
-        <div className="min-h-screen bg-[#f8fafc] flex font-outfit">
+        <div className="min-h-screen bg-[#f8fafc] flex font-outfit relative">
+            {/* Mobile Sidebar Overlay */}
+            {showSidebar && (
+                <div 
+                    className="fixed inset-0 bg-black/50 z-40 md:hidden"
+                    onClick={() => setShowSidebar(false)}
+                />
+            )}
+            
             {/* Professional Buyer Sidebar */}
-            <aside className="w-72 bg-slate-900 text-white hidden lg:flex flex-col border-r border-white/5">
+            <aside className={`w-72 bg-slate-900 text-white flex flex-col border-r border-white/5 fixed md:relative inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out ${showSidebar ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
                 <div className="p-8">
                     <div className="flex items-center gap-3 mb-10">
                         <div className="bg-agro-green p-2 rounded-xl shadow-lg shadow-agro-green/20">
@@ -198,14 +207,22 @@ export default function BuyerDashboard() {
 
             {/* Main Content */}
             <main className="flex-1 p-6 md:p-12 overflow-y-auto">
-                <header className="mb-12 flex justify-between items-end">
-                    <div>
-                        <span className="text-agro-green font-bold text-sm uppercase tracking-widest border-l-4 border-agro-yellow pl-3 mb-2 block tracking-[0.2em]">{language === 'en' ? 'BUYER HUB' : 'ESPACE ACHETEUR'}</span>
-                        <h1 className="text-5xl font-black text-slate-900 tracking-tighter capitalize leading-none pt-2">
-                             {language === 'en' ? activeTab.replace('_', ' ') : activeTab === 'overview' ? 'Aperçu' : activeTab === 'shop' ? 'Boutique' : activeTab === 'orders' ? 'Commandes' : activeTab}
-                        </h1>
+                <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-0">
+                    <div className="flex items-center gap-4">
+                        <button 
+                            className="md:hidden p-2 text-slate-600 bg-white rounded-xl shadow-sm border border-slate-100"
+                            onClick={() => setShowSidebar(!showSidebar)}
+                        >
+                            <Menu size={24} />
+                        </button>
+                        <div>
+                            <span className="text-agro-green font-bold text-sm uppercase tracking-widest border-l-4 border-agro-yellow pl-3 mb-2 block tracking-[0.2em]">{language === 'en' ? 'BUYER HUB' : 'ESPACE ACHETEUR'}</span>
+                            <h1 className="text-5xl font-black text-slate-900 tracking-tighter capitalize leading-none pt-2">
+                                 {language === 'en' ? activeTab.replace('_', ' ') : activeTab === 'overview' ? 'Aperçu' : activeTab === 'shop' ? 'Boutique' : activeTab === 'orders' ? 'Commandes' : activeTab}
+                            </h1>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-end overflow-hidden">
                          {/* Premium Language Switcher */}
                          <div className="flex bg-white p-1 rounded-2xl border-2 border-slate-100 shadow-sm overflow-hidden">
                             <button onClick={() => { setLanguage('en'); localStorage.setItem('agro_lang', 'en'); }} className={`px-4 py-2 text-[10px] font-black rounded-xl transition-all ${language === 'en' ? 'bg-slate-900 text-white' : 'text-slate-400 hover:bg-slate-50'}`}>EN</button>

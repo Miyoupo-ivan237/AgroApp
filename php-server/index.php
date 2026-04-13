@@ -29,6 +29,10 @@ if ($path === 'auth/register') {
     include 'api/ai-guide.php';
 } elseif ($path === 'ai/detect') {
     include 'api/ai.php';
+} elseif ($path === 'ai/bag_scan') {
+    include 'api/ai-bag-scan.php';
+} elseif ($path === 'ai/quiz-gen') {
+    include 'api/ai-quiz-gen.php';
 } elseif ($path === 'logistics') {
     include 'api/logistics.php';
 } elseif ($path === 'admin/stats') {

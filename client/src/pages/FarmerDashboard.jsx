@@ -10,7 +10,7 @@ import {
     Zap, Plus, Trash2, Upload, Loader2, Shield, Camera,
     Bell, MessageCircle, Star, TrendingUp, CloudSun,
     Warehouse, Users, BarChart, Sparkles, Droplets, AlertTriangle,
-    Mic, Lightbulb
+    Mic, Lightbulb, Menu, X
 } from 'lucide-react';
 
 import api from '../services/api';
@@ -31,6 +31,7 @@ export default function FarmerDashboard() {
     const [loading, setLoading] = useState(false);
     const [language, setLanguage] = useState(localStorage.getItem('agro_lang') || 'en');
     const [searchQuery, setSearchQuery] = useState('');
+    const [showSidebar, setShowSidebar] = useState(false);
 
 
     const [cropError, setCropError] = useState('');
@@ -328,9 +329,17 @@ export default function FarmerDashboard() {
     };
 
     return (
-        <div className="min-h-screen bg-[#f8fafc] flex font-outfit">
+        <div className="min-h-screen bg-[#f8fafc] flex font-outfit relative">
+            {/* Mobile Sidebar Overlay */}
+            {showSidebar && (
+                <div 
+                    className="fixed inset-0 bg-black/50 z-40 md:hidden"
+                    onClick={() => setShowSidebar(false)}
+                />
+            )}
+            
             {/* Extended Professional Sidebar */}
-            <aside className="w-72 bg-slate-900 text-white hidden lg:flex flex-col border-r border-white/5">
+            <aside className={`w-72 bg-slate-900 text-white flex flex-col border-r border-white/5 fixed md:relative inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out ${showSidebar ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
                 <div className="p-8">
                     <div className="flex items-center justify-between mb-10">
                         <div className="flex items-center gap-3">
@@ -420,12 +429,20 @@ export default function FarmerDashboard() {
                 )}
 
                 <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                    <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-                        <span className="text-agro-green font-bold text-sm uppercase tracking-widest border-l-4 border-agro-yellow pl-3 mb-2 block tracking-[0.2em]">FARMER PORTAL</span>
-                        <h1 className="text-5xl font-black text-slate-900 tracking-tighter capitalize leading-none pt-2">
-                             {activeTab.replace('_', ' ')}
-                        </h1>
-                    </motion.div>
+                    <div className="flex items-center gap-4">
+                        <button 
+                            className="md:hidden p-2 text-slate-600 bg-white rounded-xl shadow-sm border border-slate-100"
+                            onClick={() => setShowSidebar(!showSidebar)}
+                        >
+                            <Menu size={24} />
+                        </button>
+                        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+                            <span className="text-agro-green font-bold text-sm uppercase tracking-widest border-l-4 border-agro-yellow pl-3 mb-2 block tracking-[0.2em]">FARMER PORTAL</span>
+                            <h1 className="text-5xl font-black text-slate-900 tracking-tighter capitalize leading-none pt-2">
+                                 {activeTab.replace('_', ' ')}
+                            </h1>
+                        </motion.div>
+                    </div>
 
                     {/* Premium Language Switcher */}
                     <motion.div 

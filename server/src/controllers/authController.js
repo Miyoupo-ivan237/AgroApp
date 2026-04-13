@@ -75,3 +75,29 @@ exports.login = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+exports.resetPassword = async (req, res) => {
+    try {
+        const { phone: phone_raw, new_password } = req.body;
+        if (!new_password || new_password.length < 6) {
+            return res.status(400).json({ error: 'Password must be at least 6 characters long.' });
+        }
+        
+        // Normalize phone number
+        let phone = String(phone_raw).replace(/\D/g, '');
+        if (phone.length > 9 && phone.startsWith('237')) {
+            phone = phone.substring(3);
+        }
+
+        const user = await User.findOne({ where: { phone } });
+        if (!user) return res.status(404).json({ error: 'User not found with this phone number.' });
+
+        const salt = await bcrypt.genSalt(10);
+        user.password_hash = await bcrypt.hash(new_password, salt);
+        await user.save();
+
+        res.json({ message: 'Password has been reset successfully.' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};

@@ -12,6 +12,8 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [isResetMode, setIsResetMode] = useState(false);
+    const [resetSuccess, setResetSuccess] = useState(false);
     const { login, user } = useAuth();
     const navigate = useNavigate();
 
@@ -76,9 +78,12 @@ export default function Login() {
                                 <ShieldCheck size={16} /> Secure Portal
                             </motion.div>
                             <h1 className="text-4xl heading-serif text-slate-900 mb-3 leading-tight">
-                                {formatRole(selectedRole)}
+                                {isResetMode ? 'Reset Password' : formatRole(selectedRole)}
                             </h1>
-                            {!error && <p className="text-slate-500 font-medium tracking-tight">Enter your credentials to access your harvest.</p>}
+                            {!error && !resetSuccess && <p className="text-slate-500 font-medium tracking-tight">
+                                {isResetMode ? 'Enter your registered phone number and a new password.' : 'Enter your credentials to access your harvest.'}
+                            </p>}
+                            {resetSuccess && <p className="text-agro-green font-bold tracking-tight">Your password has been successfully reset! You can now log in.</p>}
                         </div>
 
                         <AnimatePresence mode="wait">
@@ -97,7 +102,22 @@ export default function Login() {
                             )}
                         </AnimatePresence>
 
-                        <form onSubmit={handleLogin} className="space-y-6">
+                        <form onSubmit={isResetMode ? async (e) => {
+                            e.preventDefault();
+                            setError('');
+                            setResetSuccess(false);
+                            setLoading(true);
+                            try {
+                                await api.post('auth/reset-password', { phone, new_password: password });
+                                setResetSuccess(true);
+                                setIsResetMode(false);
+                                setPassword('');
+                            } catch (err) {
+                                setError(err.response?.data?.error || 'Failed to reset password. Please check your phone number.');
+                            } finally {
+                                setLoading(false);
+                            }
+                        } : handleLogin} className="space-y-6">
                             <div className="space-y-2">
                                 <label className="text-sm font-bold text-slate-700 ml-1">Phone Number</label>
                                 <div className="relative group">
@@ -117,14 +137,16 @@ export default function Login() {
 
                             <div className="space-y-2">
                                 <label className="text-sm font-bold text-slate-700 ml-1 flex justify-between items-center group/label">
-                                    Password
-                                    <button 
-                                        type="button"
-                                        onClick={() => alert("Password reset is currently only available via Support. Please contact us at support@agroconnect.cm")}
-                                        className="text-xs text-agro-green font-bold cursor-pointer hover:underline opacity-60 group-hover/label:opacity-100 transition-opacity"
-                                    >
-                                        Forgot?
-                                    </button>
+                                    {isResetMode ? 'New Password' : 'Password'}
+                                    {!isResetMode && (
+                                        <button 
+                                            type="button"
+                                            onClick={() => setIsResetMode(true)}
+                                            className="text-xs text-agro-green font-bold cursor-pointer hover:underline opacity-60 group-hover/label:opacity-100 transition-opacity"
+                                        >
+                                            Forgot?
+                                        </button>
+                                    )}
                                 </label>
                                 <div className="relative group">
                                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-agro-green group-focus-within:scale-110 transition-all duration-300">
@@ -160,20 +182,30 @@ export default function Login() {
                                         className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full"
                                     />
                                 ) : (
-                                    <>Sign In <ArrowRight size={20} /></>
+                                    <>{isResetMode ? 'Reset Password' : 'Sign In'} <ArrowRight size={20} /></>
                                 )}
                             </button>
                         </form>
 
                         <div className="mt-12 text-center space-y-4">
                             <p className="text-slate-500 font-medium">
-                                New to AgroConnect? 
-                                <Link 
-                                    to={`/register?role=${selectedRole || ''}`} 
-                                    className="ml-2 text-agro-green font-bold hover:text-agro-light-green transition-colors underline-offset-4 hover:underline"
-                                >
-                                    Create Account
-                                </Link>
+                                {isResetMode ? "Remember your password?" : "New to AgroConnect?"}
+                                {isResetMode ? (
+                                    <button 
+                                        type="button"
+                                        onClick={() => setIsResetMode(false)}
+                                        className="ml-2 text-agro-green font-bold hover:text-agro-light-green transition-colors underline-offset-4 hover:underline"
+                                    >
+                                        Back to Login
+                                    </button>
+                                ) : (
+                                    <Link 
+                                        to={`/register?role=${selectedRole || ''}`} 
+                                        className="ml-2 text-agro-green font-bold hover:text-agro-light-green transition-colors underline-offset-4 hover:underline"
+                                    >
+                                        Create Account
+                                    </Link>
+                                )}
                             </p>
                             <div className="pt-4 border-t border-slate-100">
                                 <button 

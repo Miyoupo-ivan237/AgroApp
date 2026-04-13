@@ -14,10 +14,29 @@ if ($method === 'POST') {
         sendResponse(['error' => 'Unauthorized. Please log in.'], 401);
     }
     
+    // Ensure table exists
+    try {
+        $pdo->exec("CREATE TABLE IF NOT EXISTS Orders (
+            id CHAR(36) PRIMARY KEY,
+            buyer_id CHAR(36) NOT NULL,
+            crop_id CHAR(36) NOT NULL,
+            quantity DECIMAL(10, 2) NOT NULL,
+            total_crop_amount DECIMAL(10, 2) NOT NULL,
+            platform_fee DECIMAL(10, 2) NOT NULL,
+            admin_recipient_phone VARCHAR(191),
+            status ENUM('PENDING', 'NEGOTIATION', 'COMPLETED', 'CANCELLED') DEFAULT 'PENDING',
+            createdAt DATETIME NOT NULL,
+            updatedAt DATETIME NOT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+        // Try to alter if it already exists without NEGOTIATION
+        $pdo->exec("ALTER TABLE Orders MODIFY COLUMN status ENUM('PENDING', 'NEGOTIATION', 'COMPLETED', 'CANCELLED') DEFAULT 'PENDING';");
+    } catch (PDOException $e) { }
+
     // 2. Process the order
     $data = json_decode(file_get_contents("php://input"), true);
     $crop_id = $data['crop_id'] ?? '';
     $quantity = (float)($data['quantity'] ?? 1);
+    $status = $data['status'] ?? 'PENDING';
     $admin_phone = '698415093'; // Target number for the 10% gain
     
     if (!$crop_id) {
@@ -50,8 +69,8 @@ if ($method === 'POST') {
     );
     
     try {
-        $stmt = $pdo->prepare("INSERT INTO Orders (id, buyer_id, crop_id, quantity, total_crop_amount, platform_fee, admin_recipient_phone, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())");
-        $stmt->execute([$uuid, $userData['id'], $crop_id, $quantity, $total_amount, $platform_fee, $admin_phone]);
+        $stmt = $pdo->prepare("INSERT INTO Orders (id, buyer_id, crop_id, quantity, total_crop_amount, platform_fee, admin_recipient_phone, status, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())");
+        $stmt->execute([$uuid, $userData['id'], $crop_id, $quantity, $total_amount, $platform_fee, $admin_phone, $status]);
         
         sendResponse([
             'message' => 'Order placed successfully',
@@ -67,7 +86,7 @@ if ($method === 'POST') {
     
 } elseif ($method === 'GET') {
     // List orders (public/admin)
-    $stmt = $pdo->query("SELECT * FROM Orders ORDER BY createdAt DESC");
+    $stmt = $pdo->query("SELECT Orders.*, Crops.name as crop_name FROM Orders LEFT JOIN Crops ON Orders.crop_id = Crops.id ORDER BY Orders.createdAt DESC");
     sendResponse($stmt->fetchAll());
     
 } else {
