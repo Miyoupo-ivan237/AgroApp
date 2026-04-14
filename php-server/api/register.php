@@ -64,11 +64,7 @@ if (!$data) {
 $full_name = trim($data['full_name'] ?? '');
 $phone_raw = $data['phone'] ?? '';
 $phone = preg_replace('/[^0-9]/', '', $phone_raw);
-
-// Normalization for common prefixes like +237 or 237
-if (strlen($phone) > 9 && strpos($phone, '237') === 0) {
-    $phone = substr($phone, 3);
-}
+// Removed Cameroon-specific normalization to support international numbers.
 
 $password = $data['password'] ?? '';
 $role = strtoupper($data['role'] ?? 'BUYER');
@@ -81,8 +77,8 @@ if ($role === 'ADMIN') {
 if (!$full_name || strlen($full_name) < 3) {
     sendResponse(['error' => 'Please provide your full name (at least 3 characters)'], 400);
 }
-if (!$phone || strlen($phone) < 9) {
-    sendResponse(['error' => 'Please provide a valid phone number (at least 9 digits)'], 400);
+if (!$phone || strlen($phone) < 7) {
+    sendResponse(['error' => 'Please provide a valid phone number (at least 7 digits)'], 400);
 }
 if (!$password || strlen($password) < 6) {
     sendResponse(['error' => 'Password must be at least 6 characters long'], 400);

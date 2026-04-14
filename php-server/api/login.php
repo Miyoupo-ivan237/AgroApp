@@ -11,13 +11,8 @@ $data = json_decode(file_get_contents("php://input"), true);
 $phone_raw = $data['phone'] ?? '';
 $password = $data['password'] ?? '';
 
-// Robust normalization for Cameroon (9 digits)
+// Number normalization (keep digits only)
 $phone = preg_replace('/[^0-9]/', '', $phone_raw);
-if (strlen($phone) > 9) {
-    if (strpos($phone, '237') === 0) {
-        $phone = substr($phone, 3); // Remove 237 prefix
-    }
-}
 
 if (!$phone || !$password) {
     sendResponse(['error' => 'Please enter both phone number and password'], 400);

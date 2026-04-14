@@ -6,11 +6,8 @@ exports.register = async (req, res) => {
     try {
         const { full_name, phone: phone_raw, password, role } = req.body;
         
-        // Normalize phone number to match PHP backend logic (9 digits, no prefix)
+        // Normalize phone number (keep digits only) to support international numbers
         let phone = String(phone_raw).replace(/\D/g, '');
-        if (phone.length > 9 && phone.startsWith('237')) {
-            phone = phone.substring(3);
-        }
 
         console.log('[DEBUG] Registering user:', { full_name, phone, role });
 
@@ -43,11 +40,8 @@ exports.login = async (req, res) => {
     try {
         const { phone: phone_raw, password } = req.body;
         
-        // Normalize phone number
+        // Normalize phone number (keep digits only)
         let phone = String(phone_raw).replace(/\D/g, '');
-        if (phone.length > 9 && phone.startsWith('237')) {
-            phone = phone.substring(3);
-        }
 
         const user = await User.findOne({ where: { phone } });
         if (!user) return res.status(401).json({ error: 'User not found' });
@@ -83,11 +77,8 @@ exports.resetPassword = async (req, res) => {
             return res.status(400).json({ error: 'Password must be at least 6 characters long.' });
         }
         
-        // Normalize phone number
+        // Normalize phone number (keep digits only)
         let phone = String(phone_raw).replace(/\D/g, '');
-        if (phone.length > 9 && phone.startsWith('237')) {
-            phone = phone.substring(3);
-        }
 
         const user = await User.findOne({ where: { phone } });
         if (!user) return res.status(404).json({ error: 'User not found with this phone number.' });

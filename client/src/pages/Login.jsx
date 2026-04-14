@@ -126,7 +126,7 @@ export default function Login() {
                                     </span>
                                     <input 
                                         type="tel" 
-                                        placeholder="671 234 567" 
+                                        placeholder="+237 6xx ..." 
                                         required
                                         value={phone}
                                         onChange={(e) => setPhone(e.target.value)}

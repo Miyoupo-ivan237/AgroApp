@@ -29,8 +29,8 @@ export default function Register() {
             return false;
         }
         const phoneDigits = formData.phone.replace(/\D/g, '');
-        if (phoneDigits.length < 9) {
-            setError('Please enter a valid phone number (at least 9 digits).');
+        if (phoneDigits.length < 7) {
+            setError('Please enter a valid phone number (at least 7 digits).');
             return false;
         }
         if (formData.password.length < 6) {
@@ -182,7 +182,7 @@ export default function Register() {
                                             </span>
                                             <input 
                                                 type="tel" 
-                                                placeholder="671 234 567" 
+                                                placeholder="+237 671 ..." 
                                                 required
                                                 value={formData.phone}
                                                 onChange={(e) => setFormData({...formData, phone: e.target.value})}

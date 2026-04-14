@@ -51,7 +51,7 @@ export default function Landing() {
             } else {
                 if (fullName.trim().length < 3) throw new Error('Please enter your full name (at least 3 characters).');
                 const phoneDigits = phone.replace(/\D/g, '');
-                if (phoneDigits.length < 9) throw new Error('Please enter a valid phone number (at least 9 digits).');
+                if (phoneDigits.length < 7) throw new Error('Please enter a valid phone number (at least 7 digits).');
                 if (password.length < 6) throw new Error('Password must be at least 6 characters long.');
                 
                 await api.post('auth/register', { full_name: fullName, phone, password, role });
@@ -203,7 +203,7 @@ export default function Landing() {
                             <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Phone Number</label>
                             <div className="relative group">
                                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-agro-green transition-colors"><Phone size={20} /></span>
-                                <input type="tel" placeholder="671 234 567" required value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-3.5 pl-12 pr-4 text-sm font-bold text-slate-800 focus:outline-none focus:border-agro-green focus:bg-white transition-all placeholder:font-medium placeholder:text-slate-400" />
+                                <input type="tel" placeholder="+237 6xx ..." required value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-3.5 pl-12 pr-4 text-sm font-bold text-slate-800 focus:outline-none focus:border-agro-green focus:bg-white transition-all placeholder:font-medium placeholder:text-slate-400" />
                             </div>
                         </div>
 
