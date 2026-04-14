@@ -178,7 +178,7 @@ export default function BuyerDashboard() {
             )}
             
             {/* Professional Buyer Sidebar */}
-            <aside className={`w-72 bg-slate-900 text-white flex flex-col border-r border-white/5 fixed md:relative inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out ${showSidebar ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
+            <aside className={`w-72 bg-slate-900 text-white flex flex-col border-r border-white/5 fixed md:relative inset-y-0 left-0 z-50 overflow-y-auto transform transition-transform duration-300 ease-in-out ${showSidebar ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
                 <div className="p-8">
                     <div className="flex items-center gap-3 mb-10">
                         <div className="bg-agro-green p-2 rounded-xl shadow-lg shadow-agro-green/20">
