@@ -77,17 +77,19 @@ export default function AdminDashboard() {
     }
 
     return (
-        <div className="min-h-screen bg-[#f8fafc] flex font-outfit">
+        <div className="h-screen bg-[#f8fafc] flex font-outfit relative overflow-hidden">
             {/* Admin Sidebar */}
             <aside className="w-72 bg-slate-900 text-white hidden lg:flex flex-col border-r border-white/5">
-                <div className="p-8">
-                    <div className="flex items-center gap-3 mb-10">
+                <div className="p-8 pb-6 flex-shrink-0">
+                    <div className="flex items-center gap-3 mb-6">
                         <div className="bg-agro-green p-2 rounded-xl shadow-lg shadow-agro-green/20">
                             <ShieldCheck size={24} />
                         </div>
                         <h2 className="text-xl font-black tracking-tighter uppercase italic">ADMIN HUB</h2>
                     </div>
+                </div>
 
+                <div className="flex-1 overflow-y-auto px-8 pb-4 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-white/20">
                     <nav className="space-y-1">
                         <AdminSidebarLink icon={<BarChart3 size={20}/>} label="Overview" active={activeTab === 'overview'} onClick={() => setActiveTab('overview')} />
                         <AdminSidebarLink icon={<Users size={20}/>} label="User Management" active={activeTab === 'users'} onClick={() => setActiveTab('users')} />
@@ -98,7 +100,7 @@ export default function AdminDashboard() {
 
                 </div>
                 
-                <div className="mt-auto p-8 pt-0">
+                <div className="mt-auto p-8 pt-6 flex-shrink-0 border-t border-white/5">
                     <button 
                         onClick={() => { logout(); navigate('/login'); }} 
                         className="flex items-center gap-3 w-full px-4 py-4 rounded-2xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all font-bold text-sm active:scale-95 group"

@@ -329,7 +329,7 @@ export default function FarmerDashboard() {
     };
 
     return (
-        <div className="min-h-screen bg-[#f8fafc] flex font-outfit relative">
+        <div className="h-screen bg-[#f8fafc] flex font-outfit relative overflow-hidden">
             {/* Mobile Sidebar Overlay */}
             {showSidebar && (
                 <div 
@@ -339,9 +339,9 @@ export default function FarmerDashboard() {
             )}
             
             {/* Extended Professional Sidebar */}
-            <aside className={`w-72 bg-slate-900 text-white flex flex-col border-r border-white/5 fixed md:relative inset-y-0 left-0 z-50 overflow-y-auto transform transition-transform duration-300 ease-in-out ${showSidebar ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
-                <div className="p-8">
-                    <div className="flex items-center justify-between mb-10">
+            <aside className={`w-72 bg-slate-900 text-white flex flex-col border-r border-white/5 fixed md:relative inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out ${showSidebar ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
+                <div className="p-8 pb-6 flex-shrink-0">
+                    <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <div className="bg-agro-green p-2 rounded-xl shadow-lg shadow-agro-green/20">
                                 <Sprout size={24} />
@@ -364,7 +364,9 @@ export default function FarmerDashboard() {
                             </button>
                         </div>
                     </div>
+                </div>
 
+                <div className="flex-1 overflow-y-auto px-8 pb-4 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-white/20">
                     <nav className="space-y-1">
                         <SidebarLink icon={<LayoutDashboard size={20}/>} label={language === 'en' ? 'Overview' : 'Aperçu'} active={activeTab === 'overview'} onClick={() => setActiveTab('overview')} />
                         <SidebarLink icon={<Tag size={20}/>} label={language === 'en' ? 'Marketplace Hub' : 'Marché Agricole'} active={activeTab === 'market'} onClick={() => setActiveTab('market')} />
@@ -385,7 +387,7 @@ export default function FarmerDashboard() {
                     </nav>
                 </div>
                 
-                <div className="mt-auto p-8 pt-0">
+                <div className="mt-auto p-8 pt-6 flex-shrink-0 border-t border-white/5">
                     <button 
                         onClick={() => { logout(); navigate('/login'); }} 
                         className="flex items-center gap-3 w-full px-4 py-4 rounded-2xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all font-bold text-sm active:scale-95 group"
