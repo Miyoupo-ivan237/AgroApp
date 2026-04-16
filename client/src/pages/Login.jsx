@@ -187,7 +187,7 @@ export default function Login() {
                             </button>
                         </form>
 
-                        <div className="mt-12 text-center space-y-4">
+                        <div className="mt-12 text-center">
                             <p className="text-slate-500 font-medium">
                                 {isResetMode ? "Remember your password?" : "New to AgroConnect?"}
                                 {isResetMode ? (
@@ -207,18 +207,6 @@ export default function Login() {
                                     </Link>
                                 )}
                             </p>
-                            <div className="pt-4 border-t border-slate-100">
-                                <button 
-                                    onClick={() => {
-                                        const adminUser = { id: 999, full_name: "System Admin", role: "ADMIN", phone: "600000000" };
-                                        login(adminUser, "mock-admin-token");
-                                        navigate('/admin');
-                                    }}
-                                    className="text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-agro-green transition-colors"
-                                >
-                                    Testing? Click here for Demo Admin Access
-                                </button>
-                            </div>
                         </div>
 
                     </div>

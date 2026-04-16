@@ -13,18 +13,31 @@ if (!isset($_FILES['image'])) {
 }
 
 $uploadDir = '../uploads/';
+if (!is_dir($uploadDir)) {
+    mkdir($uploadDir, 0777, true);
+}
 $fileName = 'plant-' . time() . '.' . pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
 $imagePath = $uploadDir . $fileName;
 
-$crop_guess = $_POST['crop'] ?? 'maize'; // Get the crop from the user input if possible
+$crop_hint = $_POST['plant_name'] ?? $_POST['crop'] ?? 'general'; 
 
 if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
     // Correct paths for Python execution
     $absoluteImagePath = realpath($imagePath);
-    $scriptPath = realpath('../../ai/plant_detector.py');
+    $scriptPath = realpath(__DIR__ . '/../../ai/plant_detector.py');
     
-    // Execute Python script (with fallback)
-    $command = "py \"$scriptPath\" detect \"$absoluteImagePath\"";
+    // Environment-aware Python execution
+    $pythonCmd = 'python3';
+    exec("python3 --version", $out, $ret);
+    if ($ret !== 0) {
+        $pythonCmd = 'python';
+        exec("python --version", $out, $ret);
+        if ($ret !== 0) {
+            $pythonCmd = 'py';
+        }
+    }
+
+    $command = "$pythonCmd \"$scriptPath\" detect \"$absoluteImagePath\" \"$crop_hint\"";
     $output = shell_exec($command);
     
     // Clean up
@@ -53,7 +66,7 @@ if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
     } else {
         // AI Fallback using Rule-based engine
         $lang = $_POST['lang'] ?? 'en';
-        $instantDiagnosis = analyzePlantDisease($crop_guess, $lang);
+        $instantDiagnosis = analyzePlantDisease($crop_hint, $lang);
         sendResponse([
             'status' => 'success',
             'disease' => $instantDiagnosis['issue'],

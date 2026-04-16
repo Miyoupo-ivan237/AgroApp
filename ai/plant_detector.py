@@ -5,7 +5,7 @@ import json
 # Mock AI Plant Detector for AgroConnect
 # This script simulates the analysis of a crop image and returns solutions/fertilizer advice.
 
-def detect_plant_issue(image_path):
+def detect_plant_issue(image_path, hint=""):
     """
     Simulates TFLite model inference.
     """
@@ -96,15 +96,14 @@ def detect_plant_issue(image_path):
         }
     }
 
-    # Use full path for matching to allow folder-based identification (e.g., maize_samples/leaf.jpg)
+    # Use full path for matching to allow folder-based identification
     full_path = image_path.lower()
-    filename = os.path.basename(image_path).lower()
+    hint = hint.lower().strip()
     detected_crop = "General Plant"
     
     for crop in MOCK_DATABASE.keys():
-        # Match with or without underscores (e.g., 'oil palm' matches 'oil_palm.jpg')
         crop_pattern = crop.replace(" ", "_")
-        if crop in full_path or crop_pattern in full_path:
+        if crop in full_path or crop_pattern in full_path or crop in hint:
             detected_crop = crop
             break
 
@@ -366,15 +365,10 @@ if __name__ == "__main__":
         
     command = sys.argv[1]
     
-    # Handle direct path if someone uses the old way (python script.py path)
-    if command.endswith(('.jpg', '.jpeg', '.png', '.webp')):
-        result = detect_plant_issue(command)
-        print(json.dumps(result, indent=4))
-        sys.exit(0)
-
     if command == "detect" and len(sys.argv) >= 3:
         img_path = sys.argv[2]
-        result = detect_plant_issue(img_path)
+        hint = sys.argv[3] if len(sys.argv) >= 4 else ""
+        result = detect_plant_issue(img_path, hint)
         print(json.dumps(result, indent=4))
     elif command == "guide" and len(sys.argv) >= 3:
         plant_name = sys.argv[2]

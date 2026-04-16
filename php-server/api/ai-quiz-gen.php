@@ -9,10 +9,17 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $data = json_decode(file_get_contents("php://input"), true);
 $crop_name = $data['crop_name'] ?? 'general';
 
-$scriptPath = realpath('../../ai/plant_detector.py');
+$scriptPath = realpath(__DIR__ . '/../../ai/plant_detector.py');
+
+// Environment-aware Python execution
+$pythonCmd = 'python3';
+exec("python3 --version 2>&1", $out, $ret);
+if ($ret !== 0) {
+    $pythonCmd = 'python';
+}
 
 // Execute Python script
-$command = "py \"$scriptPath\" quiz_gen \"$crop_name\"";
+$command = "$pythonCmd \"$scriptPath\" quiz_gen \"$crop_name\"";
 $output = shell_exec($command);
 
 $result = null;

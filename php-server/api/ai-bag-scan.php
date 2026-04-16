@@ -21,10 +21,17 @@ $imagePath = $uploadDir . $fileName;
 
 if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
     $absoluteImagePath = realpath($imagePath);
-    $scriptPath = realpath('../../ai/plant_detector.py');
+    $scriptPath = realpath(__DIR__ . '/../../ai/plant_detector.py');
     
+    // Environment-aware Python execution
+    $pythonCmd = 'python3';
+    exec("python3 --version 2>&1", $out, $ret);
+    if ($ret !== 0) {
+        $pythonCmd = 'python';
+    }
+
     // Execute Python script
-    $command = "py \"$scriptPath\" bag_scan \"$absoluteImagePath\"";
+    $command = "$pythonCmd \"$scriptPath\" bag_scan \"$absoluteImagePath\"";
     $output = shell_exec($command);
     
     // Clean up
